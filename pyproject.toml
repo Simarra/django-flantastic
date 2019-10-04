@@ -7,8 +7,13 @@ authors = ["Loic MARTEL"]
 [tool.poetry.dependencies]
 python = "^3.6"
 Django = "^2.2"
+filesplit = "^2.0"
 
 [tool.poetry.dev-dependencies]
+flake8 = "^3.7"
+pep8 = "^1.7"
+docutils = "^0.15.2"
+pylint = "^2.4"
 
 [build-system]
 requires = ["poetry>=0.12"]
