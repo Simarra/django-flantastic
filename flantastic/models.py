@@ -24,8 +24,8 @@ class Bakeries(gismodels.Model):
     gout = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     apparence = models.PositiveSmallIntegerField(
-        validators=FIVE_STARS_VALIDATOR)
-    commentaire = models.CharField(max_length=256, null=True, default=None)
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    commentaire = models.CharField(max_length=256, blank=True)
 
     geom = gismodels.PointField()
 

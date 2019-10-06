@@ -24,7 +24,12 @@ if not os.path.isfile(TMP_CSV):
                                 chunksize=CHUNK_SIZE,
                                 compression=COMPRESSION,
                                 usecols=COLS_TO_KEEP):
+
+        # get only bakeries
         tmp_res = gm_chunk[gm_chunk[NAF_COL].isin(NAF_CODES)]
+        # DELETE GEOSCORE 0
+        tmp_res = tmp_res[tmp_res.geo_score != float(0)]
+        # do names
         tmp_res.enseigne.fillna(tmp_res.l1_normalisee, inplace=True)
         chunks.append(tmp_res)
 
