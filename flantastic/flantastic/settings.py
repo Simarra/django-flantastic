@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'flantastic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.spatialite'),
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
