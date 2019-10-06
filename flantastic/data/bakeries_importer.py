@@ -10,6 +10,8 @@ def import_bakeries():
     for line in reader:
         enseigne = str(line.pop("enseigne"))
         codpos = str(line.pop("codpos"))
+        commune = str(line.pop("libcom"))
+        siren = int(line.pop("siren"))
         vmaj = str(line.pop("vmaj"))
         vmaj1 = str(line.pop("vmaj1"))
         vmaj2 = str(line.pop("vmaj2"))
@@ -18,5 +20,14 @@ def import_bakeries():
         lat = float(line.pop("latitude"))
         lng = float(line.pop("longitude"))
 
-        res = Bakeries(enseigne=enseigne, geom=Point(
-            lng, lat), datemaj=datemaj).save()
+        res = Bakeries(enseigne=enseigne,
+                       geom=Point(lng, lat),
+                       datemaj=datemaj,
+                       commune=commune,
+                       siren=siren,
+                       codpos=codpos,
+                       vmaj=vmaj,
+                       vmaj1=vmaj1,
+                       vmaj2=vmaj2,
+                       vmaj3=vmaj3,
+                       ).save()

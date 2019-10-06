@@ -10,7 +10,9 @@ class Bakeries(gismodels.Model):
 
     id = models.AutoField(primary_key=True)
     enseigne = models.CharField(max_length=256)
-    codpos = models.CharField(max_length=8)
+    codpos = models.CharField(max_length=8, blank=True)
+    commune = models.CharField(blank=True)
+    siren = models.BigIntegerField(null=True)
     vmaj = models.CharField(max_length=256, null=True, default=None)
     vmaj1 = models.CharField(max_length=256, null=True, default=None)
     vmaj2 = models.CharField(max_length=256, null=True, default=None)
@@ -27,7 +29,10 @@ class Bakeries(gismodels.Model):
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     commentaire = models.CharField(max_length=256, blank=True)
 
-    geom = gismodels.PointField()
+    geom = gismodels.PointField(srid=4326)
 
     def __unicode__(self):
+        return self.enseigne
+
+    def __str__(self):
         return self.enseigne
