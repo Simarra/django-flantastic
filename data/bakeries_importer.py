@@ -17,9 +17,7 @@ for line in reader:
     lat = float(line.pop("latitude"))
     lng = float(line.pop("longitude"))
 
-
-
-
     Bakeries(enseigne=enseigne, geom=Point(lng, lat))
-    import pdb; pdb.set_trace()
+    import pdb
+    pdb.set_trace()
     # Bakeries.save()
