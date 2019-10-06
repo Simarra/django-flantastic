@@ -11,7 +11,7 @@ class Bakeries(gismodels.Model):
     id = models.AutoField(primary_key=True)
     enseigne = models.CharField(max_length=256)
     codpos = models.CharField(max_length=8, blank=True)
-    commune = models.CharField(blank=True)
+    commune = models.CharField(max_length= 256, blank=True)
     siren = models.BigIntegerField(null=True)
     vmaj = models.CharField(max_length=256, null=True, default=None)
     vmaj1 = models.CharField(max_length=256, null=True, default=None)
