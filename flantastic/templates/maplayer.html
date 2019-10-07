@@ -18,8 +18,19 @@
       }
   }
 
+
+
   function map_init(map, options) {
     L.geoJson(collection, {onEachFeature: onEachFeature}).addTo(map);
+
+      function onLocationFound(e) {
+        var radius = e.accuracy / 2;
+        L.marker(e.latlng).addTo(map)
+        // L.circle(e.latlng, radius).addTo(map);
+      }
+
+    map.on('locationfound', onLocationFound);
+    map.locate({setView: true, watch: false, maxZoom: 16});
   }
     </script>
 

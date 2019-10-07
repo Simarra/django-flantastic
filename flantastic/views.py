@@ -11,7 +11,9 @@ def zoom_on_position(request):
     return render(request, 'maplayer.html', context)
 
 
-def BoundariesGeoJSON(request):
+def bakeries_arround(request):
+    """Get bakeries arround users and also ones filled
+    """
     q_set = Bakeries.objects.all()[0:100]
     context = {'q_set': q_set}
     return render(request, 'maplayer.html', context)

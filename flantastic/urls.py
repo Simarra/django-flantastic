@@ -5,6 +5,6 @@ from . import views
 from .models import Bakeries
 
 urlpatterns = [
-    path('', views.zoom_on_position, name='map'),
-    path('detail', views.BoundariesGeoJSON, name='map'),
+    path('', views.zoom_on_position, name='base'),
+    path('detail', views.bakeries_arround, name='map'),
 ]
