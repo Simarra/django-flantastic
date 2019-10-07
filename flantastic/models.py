@@ -31,6 +31,10 @@ class Bakeries(gismodels.Model):
 
     geom = gismodels.PointField(srid=4326)
 
+    @property
+    def popupContent(self):
+        return self.enseigne + '\n' + self.commentaire
+
     def __unicode__(self):
         return self.enseigne
 

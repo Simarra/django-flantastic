@@ -11,7 +11,6 @@ def zoom_on_position(request):
     return render(request, 'maplayer.html', context)
 
 
-
 def BoundariesGeoJSON(request):
     q_set = Bakeries.objects.all()[0:100]
     context = {'q_set': q_set}
