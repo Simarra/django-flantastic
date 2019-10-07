@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load leaflet_tags %}
-{% load geojson_tags %}
 
 {% block extra_assets %}
   {% leaflet_js %}
@@ -10,7 +9,6 @@
 {% block content %}
 
     <script type="text/javascript">
-      // var collection = {{ q_set|geojsonfeature:"popupContent"|safe }};
 
       function onEachFeature(feature, layer) {
         if (feature.properties && feature.properties.enseigne) {

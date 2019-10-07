@@ -10,7 +10,6 @@ Django = "^2.2"
 pandas = "^0.25.1"
 wget = "^3.2"
 django-leaflet = "^0.24.0"
-django-geojson = "^2.12"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"

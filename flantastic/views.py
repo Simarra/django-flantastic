@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
-from djgeojson.serializers import Serializer as GeoJSONSerializer
 from django.core.serializers import serialize
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
