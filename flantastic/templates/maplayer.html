@@ -17,8 +17,8 @@
       // var collection = {{ q_set|geojsonfeature:"popupContent"|safe }};
 
       function onEachFeature(feature, layer) {
-        if (feature.properties && feature.properties.popupContent) {
-            layer.bindPopup(feature.properties.popupContent);
+        if (feature.properties && feature.properties.enseigne) {
+            layer.bindPopup(feature.properties.enseigne);
       }
   }
 
@@ -28,14 +28,13 @@
     // L.geoJson(collection, {onEachFeature: onEachFeature}).addTo(map);
 
     var dataurl = '{% url "map" %}';
-    console.log(dataurl)
     // Download GeoJSON via Ajax
     $.getJSON(dataurl, function (data) {
         // Add GeoJSON layer
-
-        L.geoJson(data).addTo(map);
+        L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
     });
 
+      //GEOLOC STUFF
       function onLocationFound(e) {
         var radius = e.accuracy / 2;
         L.marker(e.latlng).addTo(map)

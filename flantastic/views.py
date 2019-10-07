@@ -17,5 +17,4 @@ def bakeries_arround(request):#, longitude, latitude):
     """
     q_set = Bakeries.objects.all()[0:100]
     gjson = serialize('geojson', q_set, geometry_field="geom")
-    print(type(gjson))
     return HttpResponse(gjson)
