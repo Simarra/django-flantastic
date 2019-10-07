@@ -5,10 +5,6 @@
 {% block extra_assets %}
   {% leaflet_js %}
   {% leaflet_css %}
-  <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
@@ -29,8 +25,10 @@
 
     var dataurl = '{% url "map" %}';
     // Download GeoJSON via Ajax
-    $.getJSON(dataurl, function (data) {
-        // Add GeoJSON layer
+
+    fetch(dataurl).then( resp => {
+      return resp.json();
+    }).then( data => {
         L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
     });
 
