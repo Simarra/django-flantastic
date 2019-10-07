@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.gis.db import models as gismodels
 from django.core.validators import MaxValueValidator, MinValueValidator
+from statistics import mean
 
 
 class Bakeries(gismodels.Model):
@@ -19,6 +20,8 @@ class Bakeries(gismodels.Model):
     vmaj3 = models.CharField(max_length=256, null=True, default=None)
     datemaj = models.CharField(max_length=256, null=True, default=None)
 
+    modified_date = models.DateTimeField(auto_now=True, null=True)
+
     pate = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     texture = models.PositiveSmallIntegerField(
@@ -33,10 +36,23 @@ class Bakeries(gismodels.Model):
 
     @property
     def popupContent(self):
-        return self.enseigne + '\n' + self.commentaire
+        res = self.enseigne + '\n' + self.commentaire
+        if self.note is not None:
+            res += self.note
+        return res
 
-    def __unicode__(self):
-        return self.enseigne
+    @property
+    def note(self):
+        vals_to_estimate = [self.apparence,
+                            self.pate,
+                            self.texture,
+                            self.gout]
+        vals_to_estimate = [i for i in vals_to_estimate if i is not None]
+        if len(vals_to_estimate) >= 1:
+            res = round(mean(vals_to_estimate))
+        else:
+            res = None
+        return res
 
     def __str__(self):
         return self.enseigne
