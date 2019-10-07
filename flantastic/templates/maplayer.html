@@ -5,12 +5,16 @@
 {% block extra_assets %}
   {% leaflet_js %}
   {% leaflet_css %}
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
 
     <script type="text/javascript">
-      var collection = {{ q_set|geojsonfeature:"popupContent"|safe }};
+      // var collection = {{ q_set|geojsonfeature:"popupContent"|safe }};
 
       function onEachFeature(feature, layer) {
         if (feature.properties && feature.properties.popupContent) {
@@ -21,7 +25,16 @@
 
 
   function map_init(map, options) {
-    L.geoJson(collection, {onEachFeature: onEachFeature}).addTo(map);
+    // L.geoJson(collection, {onEachFeature: onEachFeature}).addTo(map);
+
+    var dataurl = '{% url "map" %}';
+    console.log(dataurl)
+    // Download GeoJSON via Ajax
+    $.getJSON(dataurl, function (data) {
+        // Add GeoJSON layer
+
+        L.geoJson(data).addTo(map);
+    });
 
       function onLocationFound(e) {
         var radius = e.accuracy / 2;
