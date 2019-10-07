@@ -21,7 +21,11 @@
 
 
   function map_init(map, options) {
-    // L.geoJson(collection, {onEachFeature: onEachFeature}).addTo(map);
+    //TODO: Need to change the init order:
+    // 1. Init map font
+    // 2. Get user position.
+    // 3. THEN get closests bakeries
+    // 4. Stylish the bakeries.
 
     var dataurl = '{% url "map" %}';
     // Download GeoJSON via Ajax
@@ -35,6 +39,7 @@
       //GEOLOC STUFF
       function onLocationFound(e) {
         var radius = e.accuracy / 2;
+        console.log(e.latlng)
         L.marker(e.latlng).addTo(map)
         // L.circle(e.latlng, radius).addTo(map);
       }
