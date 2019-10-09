@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/lmartel/.cache/pypoetry/virtualenvs/flantastic-py3.6/bin/python3",
+    "python.pythonPath": "/root/.cache/pypoetry/virtualenvs/flantastic-py3.7",
     "python.formatting.provider": "autopep8",
     "python.linting.pycodestyleEnabled": false,
     "python.linting.enabled": true,
