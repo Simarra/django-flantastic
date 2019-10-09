@@ -70,6 +70,25 @@ TEMPLATES = [
     },
 ]
 
+
+# Leaflet stuff
+LEAFLET_CONFIG = {
+    'SPATIAL_EXTENT': (-8.020020, 42.528796, 12.897949, 49.937080),
+    'TILES': [
+        ('watercolor', "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}", {
+            'attribution': 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            'subdomains': 'abcd',
+            'ext': 'jpg'}),
+        ('osm',
+         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+             'maxZoom': 19,
+             'attribution': """&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'"""}
+         ),
+
+    ]
+
+}
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
