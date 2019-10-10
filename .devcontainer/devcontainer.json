@@ -1,25 +1,28 @@
 // For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
 // https://github.com/microsoft/vscode-dev-containers/tree/master/containers/debian-9-git
 {
-	"name": "Geodjango Debian",
-	"dockerFile": "Dockerfile",
-	// The optional 'runArgs' property can be used to specify additional runtime arguments.
-	// Mount your .ssh folder to /root/.ssh-localhost so we can copy its contents
-	"runArgs": [
-		"-v",
-		"${env:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro"
-	],
-	// Uncomment the next line if you want to publish any ports.
-	"appPort": [
-		8000
-	],
-	// Uncomment the next line to automatically install extensions.
-	"extensions": [
-		"ms-python.python"
-	],
-	// Uncomment the next line if you want to add in default container specific settings.json values
-	// "settings":  { "workbench.colorTheme": "Quiet Light" },
-	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "poetry install && mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* ",
-	// Add the IDs of any extensions you want installed in the array below.
+    "name": "Geodjango Debian",
+    "dockerFile": "Dockerfile",
+    // The optional 'runArgs' property can be used to specify additional runtime arguments.
+    // Mount your .ssh folder to /root/.ssh-localhost so we can copy its contents
+    "runArgs": [
+        "-v",
+        "${env:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro"
+    ],
+    // Uncomment the next line if you want to publish any ports.
+    // "appPort": [
+    //     8000
+    // ],
+    // Uncomment the next line to automatically install extensions.
+    "extensions": [
+        "ms-python.python",
+        "onefy.vscode-js-css-html-formatter",
+        "batisteo.vscode-django",
+        "ecmel.vscode-html-css"
+    ],
+    // Uncomment the next line if you want to add in default container specific settings.json values
+    // "settings":  { "workbench.colorTheme": "Quiet Light" },
+    // Uncomment the next line to run commands after the container is created.
+    "postCreateCommand": "poetry install && mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* "
+        // Add the IDs of any extensions you want installed in the array below.
 }
