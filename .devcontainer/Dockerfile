@@ -37,6 +37,7 @@ RUN apt-get -y install gdal-bin \
     curl \
     libspatialite-dev \
     python3-venv \
+    libsqlite3-mod-spatialite \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y
