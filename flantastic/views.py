@@ -9,7 +9,7 @@ from .models import Bakeries
 
 def zoom_on_position(request):
     context = {}
-    return render(request, 'maplayer.html', context)
+    return render(request, 'flantastic/maplayer.html', context)
 
 
 def bakeries_arround(request):  # , longitude, latitude):
