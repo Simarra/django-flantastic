@@ -35,6 +35,8 @@ RUN apt-get -y install gdal-bin \
     binutils \
     wget \
     curl \
+    libspatialite-dev \
+    python3-venv \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y
@@ -44,7 +46,7 @@ RUN apt-get -y install gdal-bin \
 RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && rm get-pip.py \
 && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
 
-RUN apt-get install -y libspatialite-dev python3-venv
+
 
 # make some useful symlinks that are expected to exist
 RUN cd /usr/bin \
