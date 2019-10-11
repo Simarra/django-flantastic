@@ -18,7 +18,8 @@
         "ms-python.python",
         "onefy.vscode-js-css-html-formatter",
         "batisteo.vscode-django",
-        "ecmel.vscode-html-css"
+        "ecmel.vscode-html-css",
+        "eamodio.gitlens"
     ],
     // Uncomment the next line if you want to add in default container specific settings.json values
     // "settings":  { "workbench.colorTheme": "Quiet Light" },

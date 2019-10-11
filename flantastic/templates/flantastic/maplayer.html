@@ -15,7 +15,16 @@
 <script type="text/javascript" src="{% static "flantastic/js/map_init.js" %}">
 </script>
 
+<script>
+    var dataurl = '{% url "map" %}';
+</script>
+
 {% leaflet_map "map" callback="window.map_init" %}
 
+<script>
+    // Insert closest bakeries
+    window.insert_closest_bakeries_json(dataurl, map);
+
+</script>
 
 {% endblock %}
