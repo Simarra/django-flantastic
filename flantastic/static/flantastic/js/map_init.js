@@ -69,6 +69,8 @@ var overlayMaps = {
     "Boulangeries": bakeries_lyr
 };
 
+bakeries_lyr.addTo(map);
+
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 map.on('locationfound', onLocationFound);
