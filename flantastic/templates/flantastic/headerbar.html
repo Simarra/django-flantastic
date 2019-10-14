@@ -1,13 +1,12 @@
-{% load static %} 
+{% load static %}
 
 
 <link rel="stylesheet" href="{% static "flantastic/css/headerbar.css" %}">
 
 <header>
     <ul class="navigation">
-        <li><a href="#">Home</a></li>
+        <li><a href='{% url "login" %}'>Login</a></li>
+        <li><a href='{% url "logout" %}'>Logout</a></li>
         <li><a href="#">About</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Contact</a></li>
     </ul>
 </header>
