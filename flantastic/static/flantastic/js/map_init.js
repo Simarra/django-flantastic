@@ -56,6 +56,7 @@ let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { id
 
 var map = L.map('mapid', {
     zoom: 10,
+    zoomControl: false,
     layers: [watercolor]
 });
 
