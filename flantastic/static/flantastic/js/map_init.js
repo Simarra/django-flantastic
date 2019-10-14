@@ -29,7 +29,7 @@ function set_closest_bakeries_json(longitude, latitude) {
     }).then(data => {
         L.geoJson(data, {
             onEachFeature: onEachFeature
-        }).addTo(map);
+        }).addTo(bakeries_lyr);
     });
 
 }
@@ -64,9 +64,9 @@ var baseMaps = {
     "osm": osm
 };
 
-var bakeries = L.layerGroup([]);
+var bakeries_lyr = L.layerGroup([]);
 var overlayMaps = {
-    "Boulangeries": bakeries
+    "Boulangeries": bakeries_lyr
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -77,3 +77,5 @@ map.locate({
     watch: false,
     maxZoom: 16
 });
+
+console.log(window.bakeries_lyr)
