@@ -13,17 +13,13 @@
 <link rel="stylesheet" href="{% static "flantastic/css/mapstyle.css" %}">
 
 <script>
-    var dataurl = '{% url "map" %}';
+    // Url to the view rendering bakeries as geojson.
+    var dataurl = '{% url "base_closest_bakeries_url" %}';
 </script>
 
 <script type="text/javascript" src="{% static "flantastic/js/map_init.js" %}">
 </script>
 
-<script>
-// Mandatory to write hard script in order to get use the django route system
-window.set_closest_bakeries_json(dataurl, window.map);
-console.log(map)
-</script>
 
 
 {% endblock %}

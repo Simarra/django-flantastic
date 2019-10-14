@@ -1,3 +1,11 @@
+function geoloc_available() {
+    if (!"geolocation" in navigator) {
+        /* la géolocalisation est disponible */
+        alert("No geolocalisation support in your brower. location will be set in Paris.")
+    }
+}
+
+
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
         layer.bindPopup(feature.properties.enseigne);
@@ -5,9 +13,18 @@ function onEachFeature(feature, layer) {
 }
 
 
-function set_closest_bakeries_json(dataurl, map) {
+function format_data_url(base_url, longitude, latitude) {
+    let res = base_url + "/" + longitude + "/" + latitude + "/";
+    return res;
+
+}
+
+function set_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
-    fetch(dataurl).then(resp => {
+
+    let formated_url = format_data_url(dataurl, longitude, latitude)
+
+    fetch(formated_url).then(resp => {
         return resp.json();
     }).then(data => {
         L.geoJson(data, {
@@ -23,13 +40,16 @@ function onLocationFound(e) {
     console.log(e.latlng)
     L.marker(e.latlng).addTo(map)
     L.circle(e.latlng, radius).addTo(map);
+    set_closest_bakeries_json(e.longitude, e.latitude)
 }
 
-//TODO: Need to change the init order:
-// 1. Init map font
-// 2. Get user position.
-// 3. THEN get closests bakeries
-// 4. Stylish the bakeries.
+
+
+
+
+
+
+
 let watercolor = L.tileLayer("https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}", { id: 'watercolor', attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 'subdomains': 'abcd', 'ext': 'jpg' })
 
 let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { id: 'osm', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' });

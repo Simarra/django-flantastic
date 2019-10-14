@@ -1,12 +1,11 @@
 from django.urls import path
-from django.conf.urls import url
-
 from . import views
-from .models import Bakeries
 
 urlpatterns = [
     path('', views.zoom_on_position, name='base'),
-    path('map', views.bakeries_arround, name='map'),
-    path('pos/<int:longitude>/<int:latitude>/',
+    path('pos', views.bakeries_arround,
+         name='base_closest_bakeries_url'),  # Abstract url
+    path('pos/<str:longitude>/<str:latitude>/',
          views.bakeries_arround, name='closest_bakeries'),
+         # formated in ajax using the previous abstract url.
 ]
