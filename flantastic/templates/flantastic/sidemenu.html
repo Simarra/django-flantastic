@@ -13,22 +13,53 @@
   <form method="POST" id="post-form">
   {% csrf_token %}
     <div class="form-group">
-      <label>Title</label>
+      <label>Enseigne</label>
       <input type="text" class="form-control" id="enseigne" placeholder="enseigne">
     </div>
+<div class="rating">
+<label>
+    <input type="radio" name="stars" value="1" />
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input type="radio" name="stars" value="2" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input type="radio" name="stars" value="3" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>   
+  </label>
+  <label>
+    <input type="radio" name="stars" value="4" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input type="radio" name="stars" value="5" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+</div>
+
+
+
     <div class="form-group">
-      <label>Description</label>
+      <label>Commentaire</label>
       <textarea class="form-control" id="commentaire" placeholder="commentaire"></textarea>
     </div>
+
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 
 </div>
-
-<!-- Use any element to open the sidenav -->
-<span onclick="openNav()">open</span>
-
-<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
 
 <script type="text/javascript" src="{% static "flantastic/js/sidemenu.js" %}">
 </script>

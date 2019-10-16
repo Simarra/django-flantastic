@@ -19,6 +19,14 @@ function format_data_url(base_url, longitude, latitude) {
 
 }
 
+
+function signal_markup_clicked(e) {
+    // Change style of clicked markup
+    // Open nav
+    // call slot for form update
+    slot_markup_clicked(e.layer.feature.properties)
+}
+
 function set_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
 
@@ -29,7 +37,7 @@ function set_closest_bakeries_json(longitude, latitude) {
     }).then(data => {
         L.geoJson(data, {
             onEachFeature: onEachFeature
-        }).addTo(bakeries_lyr);
+        }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
     });
 
 }
@@ -37,7 +45,6 @@ function set_closest_bakeries_json(longitude, latitude) {
 
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
-    console.log(e.latlng)
     L.marker(e.latlng).addTo(map)
     L.circle(e.latlng, radius).addTo(map);
     set_closest_bakeries_json(e.longitude, e.latitude)
@@ -80,5 +87,3 @@ map.locate({
     watch: false,
     maxZoom: 16
 });
-
-console.log(window.bakeries_lyr)
