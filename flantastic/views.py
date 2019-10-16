@@ -29,7 +29,7 @@ def bakeries_arround(request, longitude, latitude):  # , longitude, latitude):
 
 
 def edit_bakerie(request):
-    posts = get_object_or_404(Bakeries, pk=pk)
+    posts = get_object_or_404(Bakeries)
     response_data = {}
 
     if request.POST.get('action') == 'post':

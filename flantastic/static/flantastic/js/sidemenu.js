@@ -1,3 +1,5 @@
+var radios = document.getElementsByName("stars");
+
 /* Set the width of the side navigation to 250px */
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -16,7 +18,13 @@ function slot_markup_clicked(properties) {
     document.getElementById("enseigne").value = properties.enseigne
     document.getElementById("commentaire").value = properties.commentaire
 
-    document.getElementsByName("stars").value = 1
+    if (properties.gout === null) {
+        for (let rad of radios) {
+            rad.checked = false;
+        }
+    } else {
+        document.getElementById('gout' + properties.gout).checked = true;
+    }
 }
 
 function slot_empty_map_clicked() {
@@ -25,18 +33,22 @@ function slot_empty_map_clicked() {
 
 }
 
-// TODO: Add an event listener on start system
-
-function star_rating() {
-
-}
-
-var taste_value = 0;
-
-var radios = document.getElementsByName("stars");
+/* function formSubmit() {
+    var myInit = {
+        method: 'POST',
+        headers: myHeaders,
+        data = {
+            enseigne: document.getElementById("enseigne").value,
+            commentaire: document.getElementById("commentaire").value,
+            gout: document.querySelector('input[name="stars"]:checked').value,
+            csrfmiddlewaretoken: document.querySelector('input[name=csrfmiddlewaretoken]').value,
+            action: 'post'
+        }
+    };
+    fetch("") //NEED TO GET THE URL.
+} */
 
 for (let rad of radios) {
-    console.log("hi hi")
     rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars"]:checked').value) })
 
 }
