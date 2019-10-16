@@ -11,7 +11,7 @@ urlpatterns = [
     # formated in ajax using the previous abstract url.
     path('login/',
          auth_views.LoginView.as_view(template_name='flantastic/login.html'), name='login'),
-
     path('logout/',
-         auth_views.LogoutView.as_view(template_name='flantastic/logout.html'), name='logout')
+         auth_views.LogoutView.as_view(template_name='flantastic/logout.html'), name='logout'),
+    path('edit_bakerie', views.edit_bakerie, name='edit_bakerie')
 ]

@@ -33,11 +33,11 @@ function slot_empty_map_clicked() {
 
 }
 
-/* function formSubmit() {
+function formSubmit() {
     var myInit = {
         method: 'POST',
-        headers: myHeaders,
-        data = {
+        // headers: myHeaders,
+        data: {
             enseigne: document.getElementById("enseigne").value,
             commentaire: document.getElementById("commentaire").value,
             gout: document.querySelector('input[name="stars"]:checked').value,
@@ -45,8 +45,11 @@ function slot_empty_map_clicked() {
             action: 'post'
         }
     };
-    fetch("") //NEED TO GET THE URL.
-} */
+    fetch(post_url, myInit).then(
+        function(response) {
+            return response.blob()
+        })
+}
 
 for (let rad of radios) {
     rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars"]:checked').value) })
