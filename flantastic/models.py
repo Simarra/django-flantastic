@@ -3,11 +3,15 @@ from django.db import models
 from django.contrib.gis.db import models as gismodels
 from django.core.validators import MaxValueValidator, MinValueValidator
 from statistics import mean
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+FIVE_STARS_VALIDATOR = [MinValueValidator(1), MaxValueValidator(5)]
 
 
 class Bakeries(gismodels.Model):
-
-    FIVE_STARS_VALIDATOR = [MinValueValidator(1), MaxValueValidator(5)]
 
     id = models.AutoField(primary_key=True)
     enseigne = models.CharField(max_length=256)
@@ -26,8 +30,6 @@ class Bakeries(gismodels.Model):
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     texture = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
-    gout = models.PositiveSmallIntegerField(
-        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     apparence = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     commentaire = models.CharField(max_length=256, blank=True)
@@ -45,8 +47,8 @@ class Bakeries(gismodels.Model):
     def note(self):
         vals_to_estimate = [self.apparence,
                             self.pate,
-                            self.texture,
-                            self.gout]
+                            self.texture
+                            ]
         vals_to_estimate = [i for i in vals_to_estimate if i is not None]
         if len(vals_to_estimate) >= 1:
             res = round(mean(vals_to_estimate))
@@ -56,3 +58,22 @@ class Bakeries(gismodels.Model):
 
     def __str__(self):
         return self.enseigne
+
+
+class Taste_choice(models.Model):
+    id = models.AutoField(primary_key=True)
+    rate = models.PositiveSmallIntegerField(
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    bakerie = models.ForeignKey(
+        Bakeries,
+        on_delete=models.CASCADE
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "id: " + str(self.id) + ", user: " + \
+            str(self.user) + ", rate: " + str(self.rate) \
+            + ", boulangerie: " + str(self.bakerie)
