@@ -77,3 +77,4 @@ class Taste_choice(models.Model):
         return "id: " + str(self.id) + ", user: " + \
             str(self.user) + ", rate: " + str(self.rate) \
             + ", boulangerie: " + str(self.bakerie)
+

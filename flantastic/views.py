@@ -4,7 +4,7 @@ from django.core.serializers import serialize
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from .models import Bakeries, Taste_choice
-import json
+from .serializers import serialize_bakeries
 
 
 def zoom_on_position(request):
@@ -17,19 +17,16 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point):
     bakeries_set = Bakeries.objects.annotate(distance=Distance(
         'geom', user_pos)).order_by('distance')[0:20]
 
-    rates_set = Taste_choice.objects.filter(user__username=user_name)
-    # Load data into Json in order to avoid multi Db query.
-    rates_dict = json.loads(Taste_choice)
+    rates_set = Taste_choice.objects.filter(
+        user__username=user_name).filter(bakerie__in=bakeries_set)
 
-    str_gjson = serialize('geojson', bakeries_set, geometry_field="geom")
-    dict_gjson = json.loads(str_gjson)
+    gjson = serialize_bakeries(bakeries_set, rates_set)
+    return gjson
 
-    for feature in dict_gjson['features']:
-        rates = rates_set.get(
-            bakerie__enseigne=feature["properties"]["enseigne"])
-        feature["properties"]["gout"] = rates.rate
-    gjson = json.dumps(dict_gjson)
-    print(gjson)
+def _get_bakerie_gjson_anonymous(user_pos: Point):
+    bakeries_set = Bakeries.objects.annotate(distance=Distance(
+        'geom', user_pos)).order_by('distance')[0:20]
+    pass
 
 
 # , longitude, latitude):
@@ -45,7 +42,7 @@ def bakeries_arround(request, longitude: str, latitude: str):
     user_pos = Point(longitude, latitude, srid=4326)
 
     if request.user.is_authenticated:
-        _get_bakeries_gjson_per_user(str(request.user), user_pos)
+        gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
     else:
         q_set = Bakeries.objects.annotate(distance=Distance(
             'geom', user_pos)).order_by('distance')[0:20]
