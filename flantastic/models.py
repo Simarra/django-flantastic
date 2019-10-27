@@ -26,13 +26,6 @@ class Bakeries(gismodels.Model):
 
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
-    pate = models.PositiveSmallIntegerField(
-        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
-    texture = models.PositiveSmallIntegerField(
-        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
-    apparence = models.PositiveSmallIntegerField(
-        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
-    commentaire = models.CharField(max_length=256, blank=True)
 
     geom = gismodels.PointField(srid=4326)
 
@@ -62,8 +55,15 @@ class Bakeries(gismodels.Model):
 
 class Taste_choice(models.Model):
     id = models.AutoField(primary_key=True)
-    rate = models.PositiveSmallIntegerField(
+    gout = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    pate = models.PositiveSmallIntegerField(
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    texture = models.PositiveSmallIntegerField(
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    apparence = models.PositiveSmallIntegerField(
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
+    commentaire = models.CharField(max_length=256, blank=True)
     bakerie = models.ForeignKey(
         Bakeries,
         on_delete=models.CASCADE

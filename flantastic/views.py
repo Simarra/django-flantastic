@@ -23,10 +23,6 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point):
     gjson = serialize_bakeries(bakeries_set, rates_set)
     return gjson
 
-def _get_bakerie_gjson_anonymous(user_pos: Point):
-    bakeries_set = Bakeries.objects.annotate(distance=Distance(
-        'geom', user_pos)).order_by('distance')[0:20]
-    pass
 
 
 # , longitude, latitude):
@@ -41,13 +37,7 @@ def bakeries_arround(request, longitude: str, latitude: str):
 
     user_pos = Point(longitude, latitude, srid=4326)
 
-    if request.user.is_authenticated:
-        gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
-    else:
-        q_set = Bakeries.objects.annotate(distance=Distance(
-            'geom', user_pos)).order_by('distance')[0:20]
-
-        gjson = serialize('geojson', q_set, geometry_field="geom")
+    gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
     return HttpResponse(gjson)
 
 
