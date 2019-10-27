@@ -1,4 +1,4 @@
-var stars_radios = document.getElementsByName("gout_stars_radio");
+var stars_radios = document.getElementsByClassName("gout_stars_radio");
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -18,12 +18,17 @@ function slot_markup_clicked(properties) {
     document.getElementById("enseigne").value = properties.enseigne
     document.getElementById("commentaire").value = properties.commentaire
 
-    if (properties.gout === null) {
-        for (let rad of stars_radios) {
-            rad.checked = false;
+
+    let stars_elts = ["gout", "apparence", "pate", "texture"]
+    for (let star_elt of stars_elts) {
+        if (properties[star_elt] === null) {
+            let current_elt = document.getElementsByName("stars_" + star_elt)
+            for (let rad of current_elt) {
+                rad.checked = false;
+            }
+        } else {
+            document.getElementById(star_elt + properties[star_elt]).checked = true;
         }
-    } else {
-        document.getElementById('gout' + properties.gout).checked = true;
     }
 }
 
@@ -52,6 +57,6 @@ function formSubmit() {
 }
 
 for (let rad of stars_radios) {
-    rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars_taste"]:checked').value) })
+    rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars_gout"]:checked').value) })
 
 }

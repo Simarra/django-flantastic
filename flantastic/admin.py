@@ -6,7 +6,8 @@ from .models import Bakeries, Taste_choice
 
 
 class TasteAdmin(admin.ModelAdmin):
-    fields = ['id', 'user', 'rate']
+    fields = ['id', 'user', 'gout', 'apparence',
+              'texture', 'commentaire', 'pate']
 
 
 admin.site.register(Bakeries, admin.GeoModelAdmin)

@@ -26,7 +26,6 @@ class Bakeries(gismodels.Model):
 
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
-
     geom = gismodels.PointField(srid=4326)
 
     @property
@@ -75,6 +74,5 @@ class Taste_choice(models.Model):
 
     def __str__(self):
         return "id: " + str(self.id) + ", user: " + \
-            str(self.user) + ", rate: " + str(self.rate) \
+            str(self.user) + ", gout: " + str(self.gout) \
             + ", boulangerie: " + str(self.bakerie)
-
