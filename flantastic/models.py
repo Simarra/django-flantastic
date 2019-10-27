@@ -11,7 +11,7 @@ User = get_user_model()
 FIVE_STARS_VALIDATOR = [MinValueValidator(1), MaxValueValidator(5)]
 
 
-class Bakeries(gismodels.Model):
+class Bakerie(gismodels.Model):
 
     id = models.AutoField(primary_key=True)
     enseigne = models.CharField(max_length=256)
@@ -26,6 +26,7 @@ class Bakeries(gismodels.Model):
 
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
+
     geom = gismodels.PointField(srid=4326)
 
     @property
@@ -36,14 +37,14 @@ class Bakeries(gismodels.Model):
         return res
 
     @property
-    def note(self):
-        vals_to_estimate = [self.apparence,
-                            self.pate,
-                            self.texture
-                            ]
-        vals_to_estimate = [i for i in vals_to_estimate if i is not None]
-        if len(vals_to_estimate) >= 1:
-            res = round(mean(vals_to_estimate))
+    def globalnote(self):
+
+        votes_for_bakerie = Vote.objects.filter(
+            bakerie=self).values_list(flat=True)
+
+        votes_for_bakerie = [i for i in votes_for_bakerie if i is not None]
+        if len(votes_for_bakerie) >= 1:
+            res = round(mean(votes_for_bakerie))
         else:
             res = None
         return res
@@ -52,7 +53,7 @@ class Bakeries(gismodels.Model):
         return self.enseigne
 
 
-class Taste_choice(models.Model):
+class Vote(models.Model):
     id = models.AutoField(primary_key=True)
     gout = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
@@ -64,7 +65,7 @@ class Taste_choice(models.Model):
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     commentaire = models.CharField(max_length=256, blank=True)
     bakerie = models.ForeignKey(
-        Bakeries,
+        Bakerie,
         on_delete=models.CASCADE
     )
     user = models.OneToOneField(

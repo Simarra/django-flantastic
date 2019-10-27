@@ -1,9 +1,8 @@
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.core.serializers import serialize
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
-from .models import Bakeries, Taste_choice
+from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
 
 
@@ -14,10 +13,10 @@ def zoom_on_position(request):
 
 def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point):
 
-    bakeries_set = Bakeries.objects.annotate(distance=Distance(
+    bakeries_set = Bakerie.objects.annotate(distance=Distance(
         'geom', user_pos)).order_by('distance')[0:20]
 
-    rates_set = Taste_choice.objects.filter(
+    rates_set = Vote.objects.filter(
         user__username=user_name).filter(bakerie__in=bakeries_set)
 
     gjson = serialize_bakeries(bakeries_set, rates_set)
@@ -42,7 +41,7 @@ def bakeries_arround(request, longitude: str, latitude: str):
 
 
 def edit_bakerie(request):
-    posts = get_object_or_404(Bakeries)
+    posts = get_object_or_404(Bakerie)
     response_data = {}
 
     if request.POST.get('action') == 'post':
@@ -52,7 +51,7 @@ def edit_bakerie(request):
         response_data['title'] = enseigne
         response_data['description'] = commentaire
 
-        Bakeries.objects.create(
+        Bakerie.objects.create(
             enseigne=enseigne,
             commentaire=commentaire,
         )

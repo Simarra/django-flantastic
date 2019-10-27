@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from .models import Bakeries, Taste_choice
+from .models import Bakerie, Vote
 
 # Register your models here.
 
@@ -10,5 +10,5 @@ class TasteAdmin(admin.ModelAdmin):
               'texture', 'commentaire', 'pate']
 
 
-admin.site.register(Bakeries, admin.GeoModelAdmin)
-admin.site.register(Taste_choice)
+admin.site.register(Bakerie, admin.GeoModelAdmin)
+admin.site.register(Vote)

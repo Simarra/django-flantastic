@@ -1,7 +1,7 @@
 import csv
 from django.contrib.gis.geos import Point
 
-from flantastic.models import Bakeries
+from flantastic.models import Bakerie
 from .definitions import TMP_CSV, DELIMITER
 
 
@@ -20,14 +20,14 @@ def import_bakeries():
         lat = float(line.pop("latitude"))
         lng = float(line.pop("longitude"))
 
-        res = Bakeries(enseigne=enseigne,
-                       geom=Point(lng, lat),
-                       datemaj=datemaj,
-                       commune=commune,
-                       siren=siren,
-                       codpos=codpos,
-                       vmaj=vmaj,
-                       vmaj1=vmaj1,
-                       vmaj2=vmaj2,
-                       vmaj3=vmaj3,
-                       ).save()
+        res = Bakerie(enseigne=enseigne,
+                      geom=Point(lng, lat),
+                      datemaj=datemaj,
+                      commune=commune,
+                      siren=siren,
+                      codpos=codpos,
+                      vmaj=vmaj,
+                      vmaj1=vmaj1,
+                      vmaj2=vmaj2,
+                      vmaj3=vmaj3,
+                      ).save()
