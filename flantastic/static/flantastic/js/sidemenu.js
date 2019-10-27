@@ -1,4 +1,4 @@
-var radios = document.getElementsByName("stars");
+var stars_radios = document.getElementsByName("gout_stars_radio");
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -19,7 +19,7 @@ function slot_markup_clicked(properties) {
     document.getElementById("commentaire").value = properties.commentaire
 
     if (properties.gout === null) {
-        for (let rad of radios) {
+        for (let rad of stars_radios) {
             rad.checked = false;
         }
     } else {
@@ -51,7 +51,7 @@ function formSubmit() {
         })
 }
 
-for (let rad of radios) {
-    rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars"]:checked').value) })
+for (let rad of stars_radios) {
+    rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars_taste"]:checked').value) })
 
 }

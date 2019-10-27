@@ -40,5 +40,3 @@ def serialize_bakeries(bakeries_qset: QuerySet, vote_qset: QuerySet):
     res = json.dumps(res)
 
     return res
-
-    
