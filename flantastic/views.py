@@ -1,11 +1,10 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
-from django.contrib.auth import get_user_model
 
 
 def zoom_on_position(request):
@@ -50,7 +49,8 @@ def edit_bakerie(request: HttpRequest):
             data: dict = json.loads(request.body)
 
             # Update bakerie
-            Bakerie.objects.filter(pk=data["pk"]).update(
+            bakery = Bakerie.objects.filter(pk=data["pk"])
+            bakery.update(
                 enseigne=data["enseigne"],
             )
 
@@ -60,31 +60,26 @@ def edit_bakerie(request: HttpRequest):
                     user=request.user
             )
 
-            vote.update(
-                commentaire=data["commentaire"],
-                gout=data["gout"],
-                pate=data["pate"],
-                texture=data["texture"],
-                apparence=data["apparence"]
-            )
+            if vote.exists():
+                vote.update(
+                    commentaire=data["commentaire"],
+                    gout=data["gout"],
+                    pate=data["pate"],
+                    texture=data["texture"],
+                    apparence=data["apparence"]
+                )
+            else:
+                vote = Vote(
+                    commentaire=data["commentaire"],
+                    gout=data["gout"],
+                    pate=data["pate"],
+                    texture=data["texture"],
+                    apparence=data["apparence"],
+                    user=request.user,
+                    bakerie=bakery.get()
+                )
+                vote.save()
 
             return JsonResponse(data)
         else:
             raise ConnectionRefusedError("Impossible to post if not logged")
-    # print("COUCOU")
-
-    # posts = get_object_or_404(Bakerie)
-    # return render(request, 'create_post.html', {'posts': posts})
-
-
-""" def edit_bakeries(request, pk):
-    post = get_object_or_404(Bakeries, pk=pk)
-    if request.method == "POST":
-        form = BakeriesForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return JsonResponse(reponse_data)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form}) """

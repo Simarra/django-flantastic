@@ -120,8 +120,3 @@ function get_bakerie_from_gjson(bakerie_id) {
     throw new Error("Bakerie not found")
 
 }
-
-for (let rad of stars_radios) {
-    rad.addEventListener("click", function() { console.log(document.querySelector('input[name="stars_gout"]:checked').value) })
-
-}

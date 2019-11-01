@@ -68,7 +68,7 @@ class Vote(models.Model):
         Bakerie,
         on_delete=models.CASCADE
     )
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
     )
