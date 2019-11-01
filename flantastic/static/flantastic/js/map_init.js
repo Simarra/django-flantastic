@@ -27,16 +27,20 @@ function signal_markup_clicked(e) {
     slot_markup_clicked(e.layer.feature.properties)
 }
 
-async function set_closest_bakeries_json(longitude, latitude) {
+async function add_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
 
     let formated_url = format_data_url(dataurl, longitude, latitude)
 
     let res = await fetch(formated_url)
-    let json = await res.json();
-    L.geoJson(json, {
+    gjson = await res.json();
+    L.geoJson(gjson, {
         onEachFeature: onEachFeature
     }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
+
+
+    // TODO: TEST TO DELETE
+    // gjson.features[0].properties.enseigne = "YOLO"
 
 }
 
@@ -45,7 +49,7 @@ function onLocationFound(e) {
     var radius = e.accuracy / 2;
     L.marker(e.latlng).addTo(map)
     L.circle(e.latlng, radius).addTo(map);
-    set_closest_bakeries_json(e.longitude, e.latitude)
+    add_closest_bakeries_json(e.longitude, e.latitude)
 }
 
 
@@ -69,6 +73,9 @@ var baseMaps = {
     "watercolor": watercolor,
     "osm": osm
 };
+
+// Geojson containg bakeries data linked to the markers.
+var gjson = {};
 
 var bakeries_lyr = L.layerGroup([]);
 var overlayMaps = {

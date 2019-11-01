@@ -9,6 +9,20 @@ function openNav() {
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
+    // Reset all fields and hide the pannel
+    document.getElementById("enseigne").value = null;
+    document.getElementById("commentaire").value = null;
+    // set the id of bakerie in a global variable to get it later.
+    current_bakerie_id = null;
+
+
+    let stars_elts = ["gout", "apparence", "pate", "texture"]
+    for (let star_elt of stars_elts) {
+        let current_elt = document.getElementsByName("stars_" + star_elt)
+        for (let rad of current_elt) {
+            rad.checked = false;
+        }
+    }
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -42,7 +56,10 @@ function slot_empty_map_clicked() {
 
 }
 
-function formSubmit() {
+async function formSubmit() {
+    // Event triggered when the user submit  form
+
+    // generate headers and get data to transmit
     let data = JSON.stringify({
         enseigne: document.getElementById("enseigne").value,
         commentaire: document.getElementById("commentaire").value,
@@ -55,8 +72,6 @@ function formSubmit() {
         action: 'post'
     });
 
-
-
     let myInit = {
         method: 'POST',
         body: data,
@@ -64,12 +79,46 @@ function formSubmit() {
         headers: { "X-CSRFToken": document.querySelector('input[name=csrfmiddlewaretoken]').value },
     };
 
-    fetch(post_url, myInit).then(
-        function(response) {
-            return response
-        }).catch(err =>
-        console.log(err)
-    )
+    // Post the data and get the result
+    try {
+        let res_json = await fetch(post_url, myInit)
+        var res = await res_json.json()
+    } catch {
+        console.log("error")
+    }
+
+    refresh_updated_point(res);
+    closeNav()
+
+
+
+}
+
+
+function refresh_updated_point(bak_data) {
+    // Method used to refresh the point properties in the map
+
+    // Get the updated point
+    let bak_leaflet_id = get_bakerie_from_gjson(bak_data.pk);
+    gjson.features[bak_leaflet_id].properties.enseigne = bak_data.enseigne;
+    gjson.features[bak_leaflet_id].properties.commentaire = bak_data.commentaire;
+    gjson.features[bak_leaflet_id].properties.gout = bak_data.gout;
+    gjson.features[bak_leaflet_id].properties.apparence = bak_data.apparence;
+    gjson.features[bak_leaflet_id].properties.texture = bak_data.texture;
+    gjson.features[bak_leaflet_id].properties.pate = bak_data.pate;
+
+}
+
+
+function get_bakerie_from_gjson(bakerie_id) {
+    // Extract bakerie id from gjson;
+    for (let the_id in gjson.features) {
+        if (parseInt(gjson.features[the_id].properties.pk) == parseInt(bakerie_id)) {
+            return the_id;
+        }
+    }
+    throw new Error("Bakerie not found")
+
 }
 
 for (let rad of stars_radios) {
