@@ -10,8 +10,10 @@ urlpatterns = [
          views.bakeries_arround, name='closest_bakeries'),
     # formated in ajax using the previous abstract url.
     path('login/',
-         auth_views.LoginView.as_view(template_name='flantastic/login.html'), name='login'),
+         auth_views.LoginView.as_view(
+             template_name='flantastic/login.html'), name='login'),
     path('logout/',
-         auth_views.LogoutView.as_view(template_name='flantastic/logout.html'), name='logout'),
-    path('edit_bakerie', views.edit_bakerie, name='edit_bakerie')
+         auth_views.LogoutView.as_view(
+             template_name='flantastic/logout.html'), name='logout'),
+    path('editbakerie', views.edit_bakerie, name='edit_bakerie')
 ]

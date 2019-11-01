@@ -32,7 +32,6 @@ def bakeries_arround(request, longitude: str, latitude: str):
         latitude, longitude = float(latitude), float(longitude)
     except ValueError:
         raise Http404("invalide lat long type")
-    print(type(request.user))
 
     user_pos = Point(longitude, latitude, srid=4326)
 
@@ -41,10 +40,13 @@ def bakeries_arround(request, longitude: str, latitude: str):
 
 
 def edit_bakerie(request):
+    print(request)
+    print("YEAH")
     posts = get_object_or_404(Bakerie)
     response_data = {}
 
     if request.POST.get('action') == 'post':
+        print("YEAH")
         enseigne = request.POST.get('enseigne')
         commentaire = request.POST.get('commentaire')
 
@@ -56,6 +58,7 @@ def edit_bakerie(request):
             commentaire=commentaire,
         )
         return JsonResponse(response_data)
+    print("COUCOU")
 
     return render(request, 'create_post.html', {'posts': posts})
 

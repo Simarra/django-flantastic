@@ -39,17 +39,25 @@ function slot_empty_map_clicked() {
 }
 
 function formSubmit() {
-    var myInit = {
+    let data = {
+        enseigne: document.getElementById("enseigne").value,
+        commentaire: document.getElementById("commentaire").value,
+        gout: document.querySelector('input[name="stars_gout"]:checked').value,
+        apparence: document.querySelector('input[name="stars_apparence"]:checked').value,
+        texture: document.querySelector('input[name="stars_texture"]:checked').value,
+        pate: document.querySelector('input[name="stars_pate"]:checked').value,
+        csrfmiddlewaretoken: document.querySelector('input[name=csrfmiddlewaretoken]').value,
+        action: 'post'
+    }
+
+
+    let myInit = {
         method: 'POST',
-        // headers: myHeaders,
-        data: {
-            enseigne: document.getElementById("enseigne").value,
-            commentaire: document.getElementById("commentaire").value,
-            gout: document.querySelector('input[name="stars"]:checked').value,
-            csrfmiddlewaretoken: document.querySelector('input[name=csrfmiddlewaretoken]').value,
-            action: 'post'
-        }
+        body: data,
+        credentials: 'same-origin',
+        headers: { "X-CSRFToken": document.querySelector('input[name=csrfmiddlewaretoken]').value },
     };
+
     fetch(post_url, myInit).then(
         function(response) {
             return response.blob()

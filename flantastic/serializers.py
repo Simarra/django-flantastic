@@ -26,7 +26,6 @@ def _update_dict_unsing_qset(dict_json: dict, q_set: QuerySet) -> dict:
             feature["properties"]["apparence"] = None
             feature["properties"]["commentaire"] = None
             feature["properties"]["gout"] = None
-            print(feature)
 
     return dict_json
 

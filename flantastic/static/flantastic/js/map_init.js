@@ -27,18 +27,16 @@ function signal_markup_clicked(e) {
     slot_markup_clicked(e.layer.feature.properties)
 }
 
-function set_closest_bakeries_json(longitude, latitude) {
+async function set_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
 
     let formated_url = format_data_url(dataurl, longitude, latitude)
 
-    fetch(formated_url).then(resp => {
-        return resp.json();
-    }).then(data => {
-        L.geoJson(data, {
-            onEachFeature: onEachFeature
-        }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
-    });
+    let res = await fetch(formated_url)
+    let json = await res.json();
+    L.geoJson(json, {
+        onEachFeature: onEachFeature
+    }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
 
 }
 
