@@ -1,9 +1,11 @@
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
+import json
+from django.contrib.auth import get_user_model
 
 
 def zoom_on_position(request):
@@ -23,7 +25,6 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point):
     return gjson
 
 
-
 # , longitude, latitude):
 def bakeries_arround(request, longitude: str, latitude: str):
     """Get bakeries arround users and also ones filled
@@ -39,28 +40,41 @@ def bakeries_arround(request, longitude: str, latitude: str):
     return HttpResponse(gjson)
 
 
-def edit_bakerie(request):
-    print(request)
-    print("YEAH")
-    posts = get_object_or_404(Bakerie)
-    response_data = {}
+def edit_bakerie(request: HttpRequest):
+    """
+    Edition of existing bakerie.
+    If no vote is exising, it is created.
+    """
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            data: dict = json.loads(request.body)
 
-    if request.POST.get('action') == 'post':
-        print("YEAH")
-        enseigne = request.POST.get('enseigne')
-        commentaire = request.POST.get('commentaire')
+            # Update bakerie
+            Bakerie.objects.filter(pk=data["pk"]).update(
+                enseigne=data["enseigne"],
+            )
 
-        response_data['title'] = enseigne
-        response_data['description'] = commentaire
+            # Update vote
+            vote = Vote.objects.filter(
+                bakerie__id=data["pk"]).filter(
+                    user=request.user
+            )
 
-        Bakerie.objects.create(
-            enseigne=enseigne,
-            commentaire=commentaire,
-        )
-        return JsonResponse(response_data)
-    print("COUCOU")
+            vote.update(
+                commentaire=data["commentaire"],
+                gout=data["gout"],
+                pate=data["pate"],
+                texture=data["texture"],
+                apparence=data["apparence"]
+            )
 
-    return render(request, 'create_post.html', {'posts': posts})
+            return JsonResponse(data)
+        else:
+            raise ConnectionRefusedError("Impossible to post if not logged")
+    # print("COUCOU")
+
+    # posts = get_object_or_404(Bakerie)
+    # return render(request, 'create_post.html', {'posts': posts})
 
 
 """ def edit_bakeries(request, pk):

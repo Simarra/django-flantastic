@@ -9,15 +9,12 @@
 </script>
 
 
-<form method="POST"  id="mySidenav" class="sidenav" onsubmit="formSubmit()">
+<div   id="mySidenav" class="sidenav">
+    {% csrf_token %}
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
-  <form method="POST" id="post-form">
-  {% csrf_token %}
-    <div class="form-group">
       <label>Enseigne</label>
       <input type="text" class="form-control" id="enseigne" placeholder="enseigne">
-    </div>
 
 <label>Gout:</label>
 <div class="gout_stars_radio rating">
@@ -121,6 +118,7 @@
     <span class="icon">★</span>
   </label>
 </div>
+
 <label>Texture</label>
 <div class="texture_stars_radio rating">
 <label>
@@ -153,17 +151,16 @@
     <span class="icon">★</span>
     <span class="icon">★</span>
   </label>
-</div>
+  </div>
 
-    <div class="form-group">
-      <label>Commentaire</label>
-      <textarea class="form-control" id="commentaire" placeholder="commentaire"></textarea>
+  <div class="form-group">
+    <label>Commentaire</label>
+    <textarea class="form-control" id="commentaire" placeholder="commentaire"></textarea>
+  </div>
+
+    <button onclick="formSubmit()" class="btn btn-primary">Soumettre</button>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-
-</div>
 
 <script type="text/javascript" src="{% static "flantastic/js/sidemenu.js" %}">
 </script>
