@@ -1,7 +1,7 @@
 .navigation {
     list-style: none;
     margin: 0;
-    background: var(--main-bg-color);
+    background-image: linear-gradient(to right, var(--secondary-bg-color), var(--main-bg-color));
     /*     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
