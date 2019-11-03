@@ -28,6 +28,11 @@ function signal_markup_clicked(e) {
     slot_markup_clicked(e.layer.feature.properties)
 }
 
+function signal_empty_map_clicked(e) {
+    // Close the side menu if it is existing
+    slot_empty_map_clicked()
+}
+
 async function add_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
 
@@ -88,6 +93,8 @@ bakeries_lyr.addTo(map);
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 map.on('locationfound', onLocationFound);
+
+map.on('click', signal_empty_map_clicked)
 map.locate({
     setView: true,
     watch: false,

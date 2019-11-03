@@ -53,6 +53,7 @@ function slot_markup_clicked(properties) {
 function slot_empty_map_clicked() {
     // 1. Delete forms
     // 2. Hide pannel
+    closeNav()
 
 }
 
