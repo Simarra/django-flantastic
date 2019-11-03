@@ -4,6 +4,8 @@ from django.contrib.gis.db import models as gismodels
 from django.core.validators import MaxValueValidator, MinValueValidator
 from statistics import mean
 from django.contrib.auth import get_user_model
+from django.db.models import Avg
+
 
 User = get_user_model()
 
@@ -25,29 +27,28 @@ class Bakerie(gismodels.Model):
     datemaj = models.CharField(max_length=256, null=True, default=None)
 
     modified_date = models.DateTimeField(auto_now=True, null=True)
-
+    global_note = models.PositiveSmallIntegerField(
+        validators=FIVE_STARS_VALIDATOR, null=True, default=None)
 
     geom = gismodels.PointField(srid=4326)
 
-    @property
-    def popupContent(self):
-        res = self.enseigne + '\n' + self.commentaire
-        if self.note is not None:
-            res += self.note
-        return res
-
-    @property
-    def globalnote(self):
+    def update_global_note(self) -> None:
+        """
+        Triggered when a vote is save to update global
+        note of the establishment
+        """
 
         votes_for_bakerie = Vote.objects.filter(
-            bakerie=self).values_list(flat=True)
+            bakerie=self)
 
-        votes_for_bakerie = [i for i in votes_for_bakerie if i is not None]
-        if len(votes_for_bakerie) >= 1:
-            res = round(mean(votes_for_bakerie))
-        else:
-            res = None
-        return res
+        criterias_fields = ["gout", "texture", "pate", "apparence"]
+
+        avgs = [Avg(i) for i in criterias_fields]
+        aggr_dict = votes_for_bakerie.aggregate(*avgs)
+        res = mean(aggr_dict.values())
+
+        self.global_note = res
+        self.save()
 
     def __str__(self):
         return self.enseigne
@@ -63,7 +64,7 @@ class Vote(models.Model):
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
     apparence = models.PositiveSmallIntegerField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
-    commentaire = models.CharField(max_length=256, blank=True)
+    commentaire = models.CharField(max_length=500, blank=True)
     bakerie = models.ForeignKey(
         Bakerie,
         on_delete=models.CASCADE
@@ -72,6 +73,7 @@ class Vote(models.Model):
         User,
         on_delete=models.CASCADE
     )
+    modified_date = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return "id: " + str(self.id) + ", user: " + \

@@ -55,19 +55,18 @@ def edit_bakerie(request: HttpRequest):
             )
 
             # Update vote
-            vote = Vote.objects.filter(
+            vote_q_set = Vote.objects.filter(
                 bakerie__id=data["pk"]).filter(
                     user=request.user
             )
 
-            if vote.exists():
-                vote.update(
-                    commentaire=data["commentaire"],
-                    gout=data["gout"],
-                    pate=data["pate"],
-                    texture=data["texture"],
-                    apparence=data["apparence"]
-                )
+            if vote_q_set.exists():
+                vote = vote_q_set.first()
+                vote.commentaire = data["commentaire"]
+                vote.gout = data["gout"]
+                vote.pate = data["pate"]
+                vote.texture = data["texture"]
+                vote.apparence = data["apparence"]
             else:
                 vote = Vote(
                     commentaire=data["commentaire"],
@@ -78,7 +77,7 @@ def edit_bakerie(request: HttpRequest):
                     user=request.user,
                     bakerie=bakery.get()
                 )
-                vote.save()
+            vote.save()
 
             return JsonResponse(data)
         else:
