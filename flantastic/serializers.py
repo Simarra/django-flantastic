@@ -39,6 +39,7 @@ def _update_dict_unsing_qset(dict_json: dict, q_set: QuerySet) -> dict:
         else:
             dict_json = _update_dict_features(dict_json, idx, None)
 
+    del(dict_json_copy)
     return dict_json
 
 

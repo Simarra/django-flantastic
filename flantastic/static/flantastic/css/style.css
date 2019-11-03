@@ -1,0 +1,11 @@
+/* https://www.colourlovers.com/palette/57650/She_Sells_Seashells. */
+
+:root {
+    --main-bg-color: #FFFEE4;
+    --font-color: #9FD6D2;
+    --font-style: 'Handlee', cursive;
+}
+
+body {
+    font-family: var(--font-style);
+}

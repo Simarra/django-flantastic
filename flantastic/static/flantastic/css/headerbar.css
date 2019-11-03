@@ -1,7 +1,7 @@
 .navigation {
     list-style: none;
     margin: 0;
-    background: #EDE574;
+    background: var(--main-bg-color);
     /*     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -13,8 +13,13 @@
 .navigation a {
     text-decoration: none;
     display: block;
-    padding: 1em;
-    color: white;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    color: var(--font-color);
+    font-weight: bold;
+    font-size: 25px;
 }
 
 .navigation a:hover {

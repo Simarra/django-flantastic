@@ -12,7 +12,7 @@
      top: 0;
      /* Stay at the top */
      left: 0;
-     background-color: #EDE574;
+     background-color: var(--main-bg-color);
      /* Black*/
      overflow-x: hidden;
      /* Disable horizontal scroll */
@@ -116,12 +116,12 @@
  }
  
  .rating label:last-child .icon {
-     color: #000;
+     color: #8B7A5E;
  }
  
  .rating:not(:hover) label input:checked~.icon,
  .rating:hover label:hover input~.icon {
-     color: #09f;
+     color: #9FD6D2;
  }
  
  .rating label input:focus:not(:checked)~.icon:last-child {
