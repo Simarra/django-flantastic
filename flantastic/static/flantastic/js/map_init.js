@@ -8,7 +8,8 @@ function geoloc_available() {
 
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
-        layer.bindPopup(feature.properties.enseigne);
+        // layer.bindPopup(feature.properties.enseigne);
+        layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [0, 0] });
     }
 }
 

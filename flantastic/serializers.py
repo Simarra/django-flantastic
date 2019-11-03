@@ -1,31 +1,43 @@
 import json
 from django.db.models import QuerySet
 from django.core.serializers import serialize
+from copy import deepcopy
 
 
 def _update_dict_unsing_qset(dict_json: dict, q_set: QuerySet) -> dict:
-    for feature in dict_json['features']:
-        if len(q_set) > 0:
+    """
+    :TODO: Fix the serialization bug
+    """
+
+    def _update_dict_features(dict_js: dict, idx: int,
+                              vote) -> dict:
+        """
+        Avoid to by DRY
+        """
+        f_names = ["pate", "texture", "apparence", "commentaire", "gout"]
+        if vote is None:
+            for elt in f_names:
+                dict_js["features"][idx]["properties"][elt] = None
+        else:
+            for elt in f_names:
+                dict_js["features"][idx]["properties"][elt] = getattr(
+                    vote, elt)
+        return dict_js
+
+    # Copy the dict because never iterate on a dict being updated
+    dict_json_copy = deepcopy(dict_json)
+
+    for idx, val in enumerate(dict_json_copy['features']):
+        if q_set.exists:
             for vote in q_set:
                 # Cache should be used
-                if int(feature["properties"]["pk"]) == int(vote.bakerie.id):
-                    feature["properties"]["pate"] = vote.pate
-                    feature["properties"]["texture"] = vote.texture
-                    feature["properties"]["apparence"] = vote.apparence
-                    feature["properties"]["commentaire"] = vote.commentaire
-                    feature["properties"]["gout"] = vote.gout
-                else:
-                    feature["properties"]["pate"] = None
-                    feature["properties"]["texture"] = None
-                    feature["properties"]["apparence"] = None
-                    feature["properties"]["commentaire"] = None
-                    feature["properties"]["gout"] = None
+                if int(val["properties"]["pk"]) == int(vote.bakerie.id):
+                    dict_json = _update_dict_features(dict_json, idx, vote)
+                    break
+            else:
+                dict_json = _update_dict_features(dict_json, idx, None)
         else:
-            feature["properties"]["pate"] = None
-            feature["properties"]["texture"] = None
-            feature["properties"]["apparence"] = None
-            feature["properties"]["commentaire"] = None
-            feature["properties"]["gout"] = None
+            dict_json = _update_dict_features(dict_json, idx, None)
 
     return dict_json
 
