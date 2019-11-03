@@ -1,6 +1,7 @@
 var stars_radios = document.getElementsByClassName("gout_stars_radio");
 
 var current_bakerie_id = null;
+var current_bakerie_global_note = null;
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -14,6 +15,7 @@ function closeNav() {
     document.getElementById("commentaire").value = null;
     // set the id of bakerie in a global variable to get it later.
     current_bakerie_id = null;
+    current_bakerie_global_note = null;
 
 
     let stars_elts = ["gout", "apparence", "pate", "texture"]
@@ -107,6 +109,7 @@ function refresh_updated_point(bak_data) {
     gjson.features[bak_leaflet_id].properties.apparence = bak_data.apparence;
     gjson.features[bak_leaflet_id].properties.texture = bak_data.texture;
     gjson.features[bak_leaflet_id].properties.pate = bak_data.pate;
+    gjson.features[bak_leaflet_id].properties.global_note = bak_data.global_note;
 
 }
 

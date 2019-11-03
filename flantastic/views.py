@@ -49,10 +49,9 @@ def edit_bakerie(request: HttpRequest):
             data: dict = json.loads(request.body)
 
             # Update bakerie
-            bakery = Bakerie.objects.filter(pk=data["pk"])
-            bakery.update(
-                enseigne=data["enseigne"],
-            )
+            bakery = Bakerie.objects.filter(pk=data["pk"]).first()
+            bakery.enseigne = data["enseigne"]
+            bakery.save()
 
             # Update vote
             vote_q_set = Vote.objects.filter(
@@ -78,6 +77,8 @@ def edit_bakerie(request: HttpRequest):
                     bakerie=bakery.get()
                 )
             vote.save()
+            bakery.refresh_from_db()
+            data["global_note"] = bakery.global_note
 
             return JsonResponse(data)
         else:
