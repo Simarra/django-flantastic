@@ -43,12 +43,11 @@ def _update_dict_unsing_qset(dict_json: dict, q_set: QuerySet) -> dict:
     return dict_json
 
 
-def serialize_bakeries(bakeries_qset: QuerySet, vote_qset: QuerySet):
+def serialize_bakeries(bakeries_qset: QuerySet, vote_qset: QuerySet) -> dict:
     str_gjson = serialize('geojson', bakeries_qset, geometry_field="geom")
     dict_gjson = json.loads(str_gjson)
 
     res = _update_dict_unsing_qset(dict_gjson, vote_qset)
 
-    res = json.dumps(res)
 
     return res

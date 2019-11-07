@@ -70,6 +70,8 @@ TEMPLATES = [
 ]
 
 
+FLANTASTIC_CLOSEST_ITEMS_NB = 20
+
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 

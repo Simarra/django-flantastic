@@ -5,6 +5,7 @@ from django.contrib.gis.geos import Point
 from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
+from django.conf import settings
 
 
 def zoom_on_position(request):
@@ -12,20 +13,40 @@ def zoom_on_position(request):
     return render(request, 'flantastic/maplayer.html', context)
 
 
-def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point):
+def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
+    """
+    Gen a geojson containing bakeries and votes related.
+    """
 
-    bakeries_set = Bakerie.objects.annotate(distance=Distance(
-        'geom', user_pos)).order_by('distance')[0:20]
+    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
 
-    rates_set = Vote.objects.filter(
-        user__username=user_name).filter(bakerie__in=bakeries_set)
+    # Get closest bakeries limit 20
+    closest_bakery_qset = Bakerie.objects.annotate(distance=Distance(
+        'geom', user_pos)).order_by('distance')[0:CLOSEST_NB_ITEMS]
 
-    gjson = serialize_bakeries(bakeries_set, rates_set)
+    # Get all votes populated per user
+    user_votes_qset = Vote.objects.filter(
+        user__username=user_name)#.filter(bakerie__in=closest_bakery_qset)
+    
+    # Get all bakeries populated per user
+    user_bakeries_qset = user_votes_qset.select_related("bakerie")
+
+    # Get closests votes
+    closest_votes_qset = Votes.filter(bakerie__in=closest_bakery_qset)
+    
+    # get vote qset
+    votes_qset = closest_votes_qset | user_votes_qset
+
+    # get Bakerie Qset
+    bakeries = closest_bakery_qset | user_bakeries_qset
+
+    
+    gjson = serialize_bakeries(bakeries, votes_qset)
     return gjson
 
 
 # , longitude, latitude):
-def bakeries_arround(request, longitude: str, latitude: str):
+def bakeries_arround(request, longitude: str, latitude: str) -> JsonResponse:
     """Get bakeries arround users and also ones filled
     """
     try:
@@ -36,7 +57,7 @@ def bakeries_arround(request, longitude: str, latitude: str):
     user_pos = Point(longitude, latitude, srid=4326)
 
     gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
-    return HttpResponse(gjson)
+    return JsonResponse(gjson)
 
 
 def edit_bakerie(request: HttpRequest):
