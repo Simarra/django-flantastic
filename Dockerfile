@@ -64,5 +64,5 @@ env path="${path}:/root/.poetry/bin"
 WORKDIR /usr/local/
 ADD ./* /usr/local/
 
-RUN source ${HOME}/.profile
+RUN source ~/.profile
 run poetry install
