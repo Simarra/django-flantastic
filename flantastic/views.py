@@ -25,8 +25,7 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
         user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
 
     # Get all bakeries populated per user
-    # FIXME: get bakeries from vote_qset as queryset
-    user_bakeries_qset = Bakerie.objects.select_related(user_votes_qset)
+    user_bakeries_qset = Bakerie.objects.filter(id__in=user_votes_qset.values_list("id"))
 
     # Get closest bakeries limit 20
     closest_bakery_qset = Bakerie.objects.annotate(distance=Distance(

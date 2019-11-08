@@ -6,7 +6,8 @@ from copy import deepcopy
 
 def _update_dict_unsing_qset(dict_json: dict, q_set: QuerySet) -> dict:
     """
-    :TODO: Fix the serialization bug
+    Sub function wich make the join in python 
+    betwenn queryset and dict.
     """
 
     def _update_dict_features(dict_js: dict, idx: int,
