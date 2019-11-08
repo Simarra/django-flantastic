@@ -10,5 +10,5 @@ before_install:
   - docker build -t flantastic_docker .
   - docker run -d -p 127.0.0.1:80:4567 flantastic_docker
   - docker ps -a
-  - docker run flantastic_docker /bin/sh -c "/root/.poetry/bin/poetry run python manage.py test"
+  - docker run flantastic_docker /bin/sh -c "/root/.poetry/bin/poetry run python manage.py test flantastic/"
   
