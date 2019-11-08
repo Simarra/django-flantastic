@@ -20,28 +20,30 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
 
     CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
 
+    # Get all votes populated per user
+    user_votes_qset = Vote.objects.filter(
+        user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
+
+    # Get all bakeries populated per user
+    # FIXME: get bakeries from vote_qset as queryset
+    user_bakeries_qset = Bakerie.objects.select_related(user_votes_qset)
+
     # Get closest bakeries limit 20
     closest_bakery_qset = Bakerie.objects.annotate(distance=Distance(
         'geom', user_pos)).order_by('distance')[0:CLOSEST_NB_ITEMS]
 
-    # Get all votes populated per user
-    user_votes_qset = Vote.objects.filter(
-        user__username=user_name)#.filter(bakerie__in=closest_bakery_qset)
-    
-    # Get all bakeries populated per user
-    user_bakeries_qset = user_votes_qset.select_related("bakerie")
-
     # Get closests votes
-    closest_votes_qset = Votes.filter(bakerie__in=closest_bakery_qset)
-    
+    closest_votes_qset = Vote.objects.filter(bakerie__in=closest_bakery_qset)
+
     # get vote qset
     votes_qset = closest_votes_qset | user_votes_qset
 
     # get Bakerie Qset
-    bakeries = closest_bakery_qset | user_bakeries_qset
+    bakeries_qset = closest_bakery_qset | user_bakeries_qset
+    print(bakeries_qset.query)
+    print(votes_qset.query)
 
-    
-    gjson = serialize_bakeries(bakeries, votes_qset)
+    gjson = serialize_bakeries(bakeries_qset, votes_qset)
     return gjson
 
 
