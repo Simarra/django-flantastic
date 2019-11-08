@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.8"
+  # PyPy versions
+  - "pypy3"  # currently Python 3.6.1,  PyPy 7.1.1-beta0
+# command to install dependencies
+
+services:
+  - docker
+
+before_install:
+  - docker build -t flantastic_docker .
+  - docker run -d -p 127.0.0.1:80:4567 flantastic_docker
+  - docker ps -a
+  - docker run flantastic_docker /bin/sh -c "poetry run python manage.py test"
+  
+# command to run tests
+script: poetry run python manage.py test
