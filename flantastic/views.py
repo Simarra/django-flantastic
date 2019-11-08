@@ -39,8 +39,6 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
 
     # get Bakerie Qset
     bakeries_qset = closest_bakery_qset | user_bakeries_qset
-    print(bakeries_qset.query)
-    print(votes_qset.query)
 
     gjson = serialize_bakeries(bakeries_qset, votes_qset)
     return gjson
