@@ -36,18 +36,14 @@ function signal_empty_map_clicked(e) {
 
 async function add_closest_bakeries_json(longitude, latitude) {
     // Download GeoJSON via Ajax
+    // TODO: Add the bouding box filter.
 
     let formated_url = format_data_url(dataurl, longitude, latitude)
 
     let res = await fetch(formated_url);
-    gjson = await res.json();
-    L.geoJson(gjson, {
-        onEachFeature: onEachFeature
-    }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
+    let json_res = await res.json();
 
-
-    // TODO: TEST TO DELETE
-    // gjson.features[0].properties.enseigne = "YOLO"
+    add_data_to_gjson(json_res);
 
 }
 
@@ -59,6 +55,11 @@ function onLocationFound(e) {
     add_closest_bakeries_json(e.longitude, e.latitude)
 }
 
+function add_data_to_gjson(json_to_add){
+    for (let feat_id in gjson.features){
+        gjson.features[feat_id] = json_to_add[feat_id]
+    }
+}
 
 
 
@@ -85,6 +86,10 @@ var baseMaps = {
 // TODO: Define the structure of the gjson here.
 // TODO: So the methods will just add elts to existing structure
 var gjson = {};
+
+L.geoJson(gjson, {
+    onEachFeature: onEachFeature
+}).addTo(bakeries_lyr).on("click", signal_markup_clicked);
 
 var bakeries_lyr = L.layerGroup([]);
 var overlayMaps = {
