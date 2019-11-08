@@ -44,9 +44,10 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
     return gjson
 
 
-# , longitude, latitude):
 def bakeries_arround(request, longitude: str, latitude: str) -> JsonResponse:
-    """Get bakeries arround users and also ones filled
+    """
+    Get bakeries arround users and also ones filled
+    WILL BE DEPRECATED SOON
     """
     try:
         latitude, longitude = float(latitude), float(longitude)
@@ -57,6 +58,34 @@ def bakeries_arround(request, longitude: str, latitude: str) -> JsonResponse:
 
     gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
     return JsonResponse(gjson)
+
+
+def user_bakeries(request) -> JsonResponse:
+    """
+    Get bakeries related to user.
+    """
+    if request.user.is_authentificated:
+        user_votes_qset = Vote.objects.filter(
+            user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
+        user_bakeries_qset = Bakerie.objects.filter(id__in=user_votes_qset.values_list("id"))
+
+        gjson = serialize_bakeries(user_bakeries_qset, user_votes_qset)
+
+        return JsonResponse(gjson)
+    else:
+        raise ConnectionRefusedError("If user is not registrated, no bakeries to get")
+
+
+def get_closest_bakeries(request, longitude: str, latitude: str, id_not_to_get: str, bbox1: str, bbox2: str, bbox3: str, bbox4: str) -> JsonReponse:
+    """
+    Get closest bakeries from a point.
+    """
+    try:
+        latitude, longitude, bbox1, bbox2, bbox3, bbox4 = float(latitude), float(longitude), float(bbox1), float(bbox2), float(bbox3), float(bbox4)
+        id_not_to_get = id_not_to_get.split("-")
+    except ValueError as e:
+        raise Http404("invalid parameter transformation", e)
+
 
 
 def edit_bakerie(request: HttpRequest):

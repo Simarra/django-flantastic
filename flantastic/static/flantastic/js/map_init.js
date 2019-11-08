@@ -1,3 +1,4 @@
+
 function geoloc_available() {
     if (!"geolocation" in navigator) {
         /* la géolocalisation est disponible */
@@ -38,7 +39,7 @@ async function add_closest_bakeries_json(longitude, latitude) {
 
     let formated_url = format_data_url(dataurl, longitude, latitude)
 
-    let res = await fetch(formated_url)
+    let res = await fetch(formated_url);
     gjson = await res.json();
     L.geoJson(gjson, {
         onEachFeature: onEachFeature
@@ -81,6 +82,8 @@ var baseMaps = {
 };
 
 // Geojson containg bakeries data linked to the markers.
+// TODO: Define the structure of the gjson here.
+// TODO: So the methods will just add elts to existing structure
 var gjson = {};
 
 var bakeries_lyr = L.layerGroup([]);

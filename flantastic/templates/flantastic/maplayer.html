@@ -15,6 +15,9 @@
 <script>
     // Url to the view rendering bakeries as geojson.
     var dataurl = '{% url "base_closest_bakeries_url" %}';
+    var is_authenticated = {{
+        request.user.is_authenticated|yesno:"true,false"
+        }};
 </script>
 
 <script type="text/javascript" src="{% static "flantastic/js/map_init.js" %}">
