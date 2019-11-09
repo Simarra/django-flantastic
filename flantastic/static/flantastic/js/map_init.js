@@ -1,4 +1,3 @@
-
 function geoloc_available() {
     if (!"geolocation" in navigator) {
         /* la géolocalisation est disponible */
@@ -55,9 +54,10 @@ function onLocationFound(e) {
     add_closest_bakeries_json(e.longitude, e.latitude)
 }
 
-function add_data_to_gjson(json_to_add){
-    for (let feat_id in gjson.features){
-        gjson.features[feat_id] = json_to_add[feat_id]
+function add_data_to_gjson(json_to_add) {
+    // FIXME: BUG: Gjson updated but not the map :'()
+    for (let feat_id in json_to_add.features) {
+        gjson.features.push(json_to_add.features[feat_id])
     }
 }
 
@@ -85,16 +85,21 @@ var baseMaps = {
 // Geojson containg bakeries data linked to the markers.
 // TODO: Define the structure of the gjson here.
 // TODO: So the methods will just add elts to existing structure
-var gjson = {};
+var bakeries_lyr = L.layerGroup([]);
+var overlayMaps = {
+    "Boulangeries": bakeries_lyr
+};
+
+var gjson = {
+    "type": "FeatureCollection",
+    "crs": { "type": "name", "properties": { "name": "EPSG:4326" } },
+    "features": []
+}
 
 L.geoJson(gjson, {
     onEachFeature: onEachFeature
 }).addTo(bakeries_lyr).on("click", signal_markup_clicked);
 
-var bakeries_lyr = L.layerGroup([]);
-var overlayMaps = {
-    "Boulangeries": bakeries_lyr
-};
 
 bakeries_lyr.addTo(map);
 

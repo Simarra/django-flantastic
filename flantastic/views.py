@@ -25,7 +25,8 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
         user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
 
     # Get all bakeries populated per user
-    user_bakeries_qset = Bakerie.objects.filter(id__in=user_votes_qset.values_list("id"))
+    user_bakeries_qset = Bakerie.objects.filter(
+        id__in=user_votes_qset.values_list("id"))
 
     # Get closest bakeries limit 20
     closest_bakery_qset = Bakerie.objects.annotate(distance=Distance(
@@ -67,25 +68,27 @@ def user_bakeries(request) -> JsonResponse:
     if request.user.is_authentificated:
         user_votes_qset = Vote.objects.filter(
             user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
-        user_bakeries_qset = Bakerie.objects.filter(id__in=user_votes_qset.values_list("id"))
+        user_bakeries_qset = Bakerie.objects.filter(
+            id__in=user_votes_qset.values_list("id"))
 
         gjson = serialize_bakeries(user_bakeries_qset, user_votes_qset)
 
         return JsonResponse(gjson)
     else:
-        raise ConnectionRefusedError("If user is not registrated, no bakeries to get")
+        raise ConnectionRefusedError(
+            "If user is not registrated, no bakeries to get")
 
 
-def get_closest_bakeries(request, longitude: str, latitude: str, id_not_to_get: str, bbox1: str, bbox2: str, bbox3: str, bbox4: str) -> JsonReponse:
+def get_closest_bakeries(request, longitude: str, latitude: str, id_not_to_get: str, bbox1: str, bbox2: str, bbox3: str, bbox4: str) -> JsonResponse:
     """
     Get closest bakeries from a point.
     """
     try:
-        latitude, longitude, bbox1, bbox2, bbox3, bbox4 = float(latitude), float(longitude), float(bbox1), float(bbox2), float(bbox3), float(bbox4)
+        latitude, longitude, bbox1, bbox2, bbox3, bbox4 = float(latitude), float(
+            longitude), float(bbox1), float(bbox2), float(bbox3), float(bbox4)
         id_not_to_get = id_not_to_get.split("-")
     except ValueError as e:
         raise Http404("invalid parameter transformation", e)
-
 
 
 def edit_bakerie(request: HttpRequest):
