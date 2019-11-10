@@ -13,7 +13,7 @@ urlpatterns = [
           '<str:bbox_south_west>/',
          views.bakeries_arround, name='closest_bakeries'),
     path('api/v1/user_bakeries/',
-         views.user_bakeries, name='closest_bakeries'),
+         views.user_bakeries, name='user_bakeries'),
     # formated in ajax using the previous abstract url.
     path('login/',
          auth_views.LoginView.as_view(

@@ -79,6 +79,15 @@ function add_data_to_gjson(json_to_add) {
     feature_group.addData(json_to_add)
 }
 
+async function set_user_bakeries() {
+    if (is_authenticated == true) {
+        let res = await fetch(user_bakeries_url);
+        let json_res = await res.json();
+
+        add_data_to_gjson(json_res);
+    }
+}
+
 
 
 
@@ -125,9 +134,7 @@ bakeries_lyr.addTo(map);
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-// TODO: Add all users points: TODO
-
-
+set_user_bakeries();
 // Add position and closest points
 map.on('locationfound', onLocationFound);
 

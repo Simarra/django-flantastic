@@ -61,7 +61,8 @@ def user_bakeries(request) -> JsonResponse:
     """
     Get bakeries related to user.
     """
-    if request.user.is_authentificated:
+    if request.user.is_authenticated:
+        user_name = request.user.username
         user_votes_qset = Vote.objects.filter(
             user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
         user_bakeries_qset = Bakerie.objects.filter(
@@ -119,7 +120,6 @@ def bakeries_arround(request, id_not_to_get: str,
                ).filter(geom__intersects=bbox
                         )[0:CLOSEST_NB_ITEMS]
 
-    print(bakeries_qset.query)
     # Get all votes related to users
     user_votes_qset = Vote.objects.filter(
         user__username=user_name).filter(bakerie__in=bakeries_qset)
