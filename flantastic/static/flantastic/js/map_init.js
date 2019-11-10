@@ -59,6 +59,7 @@ function add_data_to_gjson(json_to_add) {
     for (let feat_id in json_to_add.features) {
         gjson.features.push(json_to_add.features[feat_id])
     }
+    feature_group.addData(json_to_add)
 }
 
 
@@ -96,16 +97,23 @@ var gjson = {
     "features": []
 }
 
-L.geoJson(gjson, {
+var feature_group = L.geoJson(gjson, {
     onEachFeature: onEachFeature
-}).addTo(bakeries_lyr).on("click", signal_markup_clicked);
+})
+
+feature_group.addTo(bakeries_lyr).on("click", signal_markup_clicked);
 
 
 bakeries_lyr.addTo(map);
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+// TODO: Add all users points: TODO
+
+
+// Add position and closest points
 map.on('locationfound', onLocationFound);
+
 
 map.on('click', signal_empty_map_clicked)
 map.locate({
