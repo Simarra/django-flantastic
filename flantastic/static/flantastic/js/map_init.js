@@ -14,12 +14,23 @@ function onEachFeature(feature, layer) {
 }
 
 
-function format_data_url(base_url, longlat) {
-    let res = base_url + "bakerie_arround/pos/" + longlat + "/";
+function format_get_closests_url(base_url, id_not_to_get, longlat, bbox_ne, bbox_sw) {
+    let res = base_url + "bakerie_arround/pos/" +
+        id_not_to_get + "/" +
+        longlat + "/" +
+        bbox_ne + "/" +
+        bbox_sw + "/";
     return res;
 
 }
 
+function _format_point_for_api(lng, lat) {
+    // Format point for the backend;
+
+    let latlong = "(" + lng + "," + lat + ")";
+    return latlong
+
+}
 
 function signal_markup_clicked(e) {
     // Change style of clicked markup
@@ -33,11 +44,10 @@ function signal_empty_map_clicked(e) {
     slot_empty_map_clicked()
 }
 
-async function add_closest_bakeries_json(longlat) {
+async function add_closest_bakeries_json(longlat, id_not_to_get, bbox_ne, bbox_sw) {
     // Download GeoJSON via Ajax
-    // TODO: Add the bouding box filter.
 
-    let formated_url = format_data_url(dataurl, longlat)
+    let formated_url = format_get_closests_url(dataurl, id_not_to_get, longlat, bbox_ne, bbox_sw)
 
     let res = await fetch(formated_url);
     let json_res = await res.json();
@@ -49,9 +59,16 @@ async function add_closest_bakeries_json(longlat) {
 
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
-    L.marker(e.latlng).addTo(map)
+    L.marker(e.latlng).addTo(map);
     L.circle(e.latlng, radius).addTo(map);
-    add_closest_bakeries_json("(" + e.longitude + "," + e.latitude + ")")
+    let id_not_to_get = "99999999";
+    let latlong = _format_point_for_api(e.longitude, e.latitude);
+    let bbox = map.getBounds();
+    console.log(bbox)
+
+    let bbox_ne = _format_point_for_api(bbox._northEast.lng, bbox._northEast.lat);
+    let bbox_sw = _format_point_for_api(bbox._southWest.lng, bbox._southWest.lat);
+    add_closest_bakeries_json(latlong, id_not_to_get, bbox_ne, bbox_sw);
 }
 
 function add_data_to_gjson(json_to_add) {

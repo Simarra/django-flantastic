@@ -6,6 +6,7 @@ from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
 from django.conf import settings
+from typing import Tuple
 
 
 def zoom_on_position(request):
@@ -45,29 +46,15 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
     return gjson
 
 
-def bakeries_arround(request, longlat: str) -> JsonResponse:
+def _get_long_lat(longlat: str) -> Tuple[float]:
     """
-    Get bakeries arround a point 
+    Convert string to long lat
     """
     longlat = longlat[1:-1].split(",")
     longitude, latitude = float(longlat[0]), float(longlat[1])
+    return longitude, latitude
 
-    user_name = request.user.username
 
-    user_pos = Point(longitude, latitude, srid=4326)
-
-    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
-
-    # Get closest bakeries limit 20
-    bakeries_qset = Bakerie.objects.annotate(distance=Distance(
-        'geom', user_pos)).order_by('distance')[0:CLOSEST_NB_ITEMS]
-
-    # Get all votes related to users
-    user_votes_qset = Vote.objects.filter(
-        user__username=user_name).filter(bakerie__in=bakeries_qset)
-
-    gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
-    return JsonResponse(gjson)
 
 
 def user_bakeries(request) -> JsonResponse:
@@ -88,19 +75,29 @@ def user_bakeries(request) -> JsonResponse:
             "If user is not registrated, no bakeries to get")
 
 
-def bakeries_arround_2(request, longitude: str, latitude: str, id_not_to_get: str, bbox_top_left: str, bbox_top_right: str, bbox_bottom_left: str, bbox_bottom_right: str) -> JsonResponse:
+def bakeries_arround(request, id_not_to_get: str,
+                       longlat: str,
+                       bbox_north_east: str,
+                       bbox_south_west: str) -> JsonResponse:
     """
     Get closest bakeries from a point.
     id_not_to_get: pk of bakeries not to get
     bbox: borders of bouding box
 
     """
-    try:
-        latitude, longitude, bbox_top_left, bbox_top_right, bbox_bottom_left, bbox_bottom_right = float(latitude), float(
-            longitude), float(bbox_top_left), float(bbox_top_right), float(bbox_bottom_left), float(bbox_bottom_right)
-        id_not_to_get = id_not_to_get.split("-")
-    except ValueError as e:
-        raise Http404("invalid parameter transformation", e)
+
+    id_not_to_get = id_not_to_get.split("-")
+
+    longitude, latitude = _get_long_lat(longlat)
+
+    ne = _get_long_lat(bbox_north_east)
+    sw = _get_long_lat(bbox_south_west)
+    xmin = sw[1]
+    ymin = sw[0]
+    xmax = ne[1]
+    ymax = ne[0]
+    # bbox = ((xmin, ymax),(xmax, ymax), (xmax, ymin), (xmin, ymin), (xmin, ymax))
+    bbox = ((ymax, xmin),(ymax, xmax), (ymin, xmax), (ymin, xmin), (ymax, xmin))
 
     user_name = request.user.username
 
@@ -110,10 +107,7 @@ def bakeries_arround_2(request, longitude: str, latitude: str, id_not_to_get: st
     # Bounding box bakeries, to get only bakeries on a delimited area
     # Its also improve performances because we dont need to get all
     # the presents id of the map
-    bbox = Polygon((bbox_top_left,
-                    bbox_bottom_right,
-                    bbox_bottom_left,
-                    bbox_bottom_right))
+    bbox = Polygon(bbox)
 
     CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
 
@@ -121,11 +115,11 @@ def bakeries_arround_2(request, longitude: str, latitude: str, id_not_to_get: st
     bakeries_qset = Bakerie.objects.annotate(
         distance=Distance(
             'geom', center_point)
-            ).order_by('distance'
-            ).filter(geom__intersects=bbox
-            )[0:CLOSEST_NB_ITEMS]
+    ).order_by('distance'
+               ).filter(geom__intersects=bbox
+                        )[0:CLOSEST_NB_ITEMS]
 
-
+    print(bakeries_qset.query)
     # Get all votes related to users
     user_votes_qset = Vote.objects.filter(
         user__username=user_name).filter(bakerie__in=bakeries_qset)
