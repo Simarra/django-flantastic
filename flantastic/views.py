@@ -55,8 +55,6 @@ def _get_long_lat(longlat: str) -> Tuple[float]:
     return longitude, latitude
 
 
-
-
 def user_bakeries(request) -> JsonResponse:
     """
     Get bakeries related to user.
@@ -77,9 +75,9 @@ def user_bakeries(request) -> JsonResponse:
 
 
 def bakeries_arround(request, id_not_to_get: str,
-                       longlat: str,
-                       bbox_north_east: str,
-                       bbox_south_west: str) -> JsonResponse:
+                     longlat: str,
+                     bbox_north_east: str,
+                     bbox_south_west: str) -> JsonResponse:
     """
     Get closest bakeries from a point.
     id_not_to_get: pk of bakeries not to get
@@ -97,8 +95,8 @@ def bakeries_arround(request, id_not_to_get: str,
     ymin = sw[0]
     xmax = ne[1]
     ymax = ne[0]
-    # bbox = ((xmin, ymax),(xmax, ymax), (xmax, ymin), (xmin, ymin), (xmin, ymax))
-    bbox = ((ymax, xmin),(ymax, xmax), (ymin, xmax), (ymin, xmin), (ymax, xmin))
+    bbox = ((ymax, xmin), (ymax, xmax),
+            (ymin, xmax), (ymin, xmin), (ymax, xmin))
 
     user_name = request.user.username
 
@@ -116,15 +114,17 @@ def bakeries_arround(request, id_not_to_get: str,
     bakeries_qset = Bakerie.objects.annotate(
         distance=Distance(
             'geom', center_point)
-    ).order_by('distance'
-               ).filter(geom__intersects=bbox
-                        )[0:CLOSEST_NB_ITEMS]
+    ).filter(geom__intersects=bbox
+             ).exclude(id__in=id_not_to_get
+                       ).order_by('distance'
+                                  )[0:CLOSEST_NB_ITEMS]
 
     # Get all votes related to users
     user_votes_qset = Vote.objects.filter(
         user__username=user_name).filter(bakerie__in=bakeries_qset)
 
     gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
+    print(bakeries_qset.query)
     return JsonResponse(gjson)
 
 

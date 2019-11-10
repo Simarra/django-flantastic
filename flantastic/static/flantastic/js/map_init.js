@@ -5,6 +5,34 @@ function geoloc_available() {
     }
 }
 
+function getFeaturesInView() {
+    // Function wich retrieve data from screen bbox
+    var features = [];
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+            if (map.getBounds().contains(layer.getLatLng())) {
+                features.push(layer.feature);
+            }
+        }
+    });
+    return features;
+}
+
+function getPkInView() {
+    // retrieve pk of elts in screen bbox
+    let features = getFeaturesInView()
+    let res = [];
+    for (elt of features) {
+        if (elt) {
+            res.push(elt.properties.pk);
+        }
+    }
+
+    return res
+
+}
+
+
 
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
@@ -64,7 +92,6 @@ function onLocationFound(e) {
     let id_not_to_get = "99999999";
     let latlong = _format_point_for_api(e.longitude, e.latitude);
     let bbox = map.getBounds();
-    console.log(bbox)
 
     let bbox_ne = _format_point_for_api(bbox._northEast.lng, bbox._northEast.lat);
     let bbox_sw = _format_point_for_api(bbox._southWest.lng, bbox._southWest.lat);
@@ -80,6 +107,7 @@ function add_data_to_gjson(json_to_add) {
 }
 
 async function set_user_bakeries() {
+    // get and set user bakeries only if user is logged
     if (is_authenticated == true) {
         let res = await fetch(user_bakeries_url);
         let json_res = await res.json();
@@ -144,4 +172,23 @@ map.locate({
     setView: true,
     watch: false,
     maxZoom: 16
+});
+
+map.on('moveend', function(e) {
+    // Fix the warning when data is empty
+    let pks = getPkInView();
+    if (pks.length == 0) {
+        pks.push("999999")
+    }
+
+    let id_not_to_get = getPkInView().join("-");
+
+    let map_center = map.getCenter();
+    let latlong = _format_point_for_api(map_center.lng, map_center.lat);
+    let bbox = map.getBounds();
+
+    let bbox_ne = _format_point_for_api(bbox._northEast.lng, bbox._northEast.lat);
+    let bbox_sw = _format_point_for_api(bbox._southWest.lng, bbox._southWest.lat);
+    add_closest_bakeries_json(latlong, id_not_to_get, bbox_ne, bbox_sw);
+
 });
