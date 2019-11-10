@@ -14,7 +14,7 @@
 
 <script>
     // Url to the view rendering bakeries as geojson.
-    var dataurl = '{% url "base_closest_bakeries_url" %}';
+    var dataurl = '{% url "base_api_url" %}';
     var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
 </script>
 

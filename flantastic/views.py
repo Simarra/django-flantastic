@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 from .models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
@@ -45,19 +45,28 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
     return gjson
 
 
-def bakeries_arround(request, longitude: str, latitude: str) -> JsonResponse:
+def bakeries_arround(request, longlat: str) -> JsonResponse:
     """
-    Get bakeries arround users and also ones filled
-    WILL BE DEPRECATED SOON
+    Get bakeries arround a point 
     """
-    try:
-        latitude, longitude = float(latitude), float(longitude)
-    except ValueError:
-        raise Http404("invalide lat long type")
+    longlat = longlat[1:-1].split(",")
+    longitude, latitude = float(longlat[0]), float(longlat[1])
+
+    user_name = request.user.username
 
     user_pos = Point(longitude, latitude, srid=4326)
 
-    gjson = _get_bakeries_gjson_per_user(str(request.user), user_pos)
+    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+
+    # Get closest bakeries limit 20
+    bakeries_qset = Bakerie.objects.annotate(distance=Distance(
+        'geom', user_pos)).order_by('distance')[0:CLOSEST_NB_ITEMS]
+
+    # Get all votes related to users
+    user_votes_qset = Vote.objects.filter(
+        user__username=user_name).filter(bakerie__in=bakeries_qset)
+
+    gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
     return JsonResponse(gjson)
 
 
@@ -79,16 +88,50 @@ def user_bakeries(request) -> JsonResponse:
             "If user is not registrated, no bakeries to get")
 
 
-def get_closest_bakeries(request, longitude: str, latitude: str, id_not_to_get: str, bbox1: str, bbox2: str, bbox3: str, bbox4: str) -> JsonResponse:
+def bakeries_arround_2(request, longitude: str, latitude: str, id_not_to_get: str, bbox_top_left: str, bbox_top_right: str, bbox_bottom_left: str, bbox_bottom_right: str) -> JsonResponse:
     """
     Get closest bakeries from a point.
+    id_not_to_get: pk of bakeries not to get
+    bbox: borders of bouding box
+
     """
     try:
-        latitude, longitude, bbox1, bbox2, bbox3, bbox4 = float(latitude), float(
-            longitude), float(bbox1), float(bbox2), float(bbox3), float(bbox4)
+        latitude, longitude, bbox_top_left, bbox_top_right, bbox_bottom_left, bbox_bottom_right = float(latitude), float(
+            longitude), float(bbox_top_left), float(bbox_top_right), float(bbox_bottom_left), float(bbox_bottom_right)
         id_not_to_get = id_not_to_get.split("-")
     except ValueError as e:
         raise Http404("invalid parameter transformation", e)
+
+    user_name = request.user.username
+
+    # Center point where to get arround bakeries
+    center_point = Point(longitude, latitude, srid=4326)
+
+    # Bounding box bakeries, to get only bakeries on a delimited area
+    # Its also improve performances because we dont need to get all
+    # the presents id of the map
+    bbox = Polygon((bbox_top_left,
+                    bbox_bottom_right,
+                    bbox_bottom_left,
+                    bbox_bottom_right))
+
+    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+
+    # Get closest bakeries limit 20 and in bbox
+    bakeries_qset = Bakerie.objects.annotate(
+        distance=Distance(
+            'geom', center_point)
+            ).order_by('distance'
+            ).filter(geom__intersects=bbox
+            )[0:CLOSEST_NB_ITEMS]
+
+
+    # Get all votes related to users
+    user_votes_qset = Vote.objects.filter(
+        user__username=user_name).filter(bakerie__in=bakeries_qset)
+
+    gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
+    return JsonResponse(gjson)
 
 
 def edit_bakerie(request: HttpRequest):
