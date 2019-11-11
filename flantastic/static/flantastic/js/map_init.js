@@ -178,7 +178,7 @@ map.locate({
 
 map.on('moveend', function(e) {
     // Add points when moving on map. Limited to 500
-    if (gjson.features.lenght > 500) {
+    if (gjson.features.lenght > 200) {
         return;
     }
     if (map.getZoom() < 17) {
