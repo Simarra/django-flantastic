@@ -162,7 +162,9 @@ bakeries_lyr.addTo(map);
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-set_user_bakeries();
+if (is_authenticated == true) {
+    set_user_bakeries()
+};
 // Add position and closest points
 map.on('locationfound', onLocationFound);
 
@@ -175,13 +177,20 @@ map.locate({
 });
 
 map.on('moveend', function(e) {
-    // Fix the warning when data is empty
+    // Add points when moving on map. Limited to 500
+    if (gjson.features.lenght > 500) {
+        return;
+    }
+    if (map.getZoom() < 17) {
+        return
+    }
+
     let pks = getPkInView();
     if (pks.length == 0) {
         pks.push("999999")
     }
 
-    let id_not_to_get = getPkInView().join("-");
+    let id_not_to_get = pks.join("-");
 
     let map_center = map.getCenter();
     let latlong = _format_point_for_api(map_center.lng, map_center.lat);

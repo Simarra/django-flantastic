@@ -23,7 +23,7 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
 
     # Get all votes populated per user
     user_votes_qset = Vote.objects.filter(
-        user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
+        user__username=user_name)
 
     # Get all bakeries populated per user
     user_bakeries_qset = Bakerie.objects.filter(
@@ -124,7 +124,6 @@ def bakeries_arround(request, id_not_to_get: str,
         user__username=user_name).filter(bakerie__in=bakeries_qset)
 
     gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
-    print(bakeries_qset.query)
     return JsonResponse(gjson)
 
 
@@ -163,7 +162,7 @@ def edit_bakerie(request: HttpRequest):
                     texture=data["texture"],
                     apparence=data["apparence"],
                     user=request.user,
-                    bakerie=bakery.get()
+                    bakerie=bakery
                 )
             vote.save()
             bakery.refresh_from_db()
