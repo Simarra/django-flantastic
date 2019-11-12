@@ -8,7 +8,7 @@ function geoloc_available() {
 function getFeaturesInView() {
     // Function wich retrieve data from screen bbox
     var features = [];
-    map.eachLayer(function(layer) {
+    map.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
             if (map.getBounds().contains(layer.getLatLng())) {
                 features.push(layer.feature);
@@ -38,6 +38,20 @@ function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
         // layer.bindPopup(feature.properties.enseigne);
         layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [0, 0] });
+    }
+}
+
+
+function pointToLayer(feature, layer) {
+    var lat = feature.geometry.coordinates[1];
+    var lon = feature.geometry.coordinates[0];
+    switch (feature.properties.global_note) {
+        case '0': return L.marker([lat, lon], { icon: unnotedBakeryIcon });
+        case '1': return L.marker([lat, lon], { icon: badBakeryIcon });
+        case '2':
+        case '3': return L.marker([lat, lon], { icon: mediumBakeryIcon });
+        case '4': return L.marker([lat, lon], { icon: badBakeryIcon });
+        case '5':
     }
 }
 
@@ -99,7 +113,6 @@ function onLocationFound(e) {
 }
 
 function add_data_to_gjson(json_to_add) {
-    // FIXME: BUG: Gjson updated but not the map :'()
     for (let feat_id in json_to_add.features) {
         gjson.features.push(json_to_add.features[feat_id])
     }
@@ -151,8 +164,25 @@ var gjson = {
     "features": []
 }
 
+
+var BakeryIcon = L.Icon.extend({
+    options: {
+        iconSize: [38, 95],
+        shadowSize: [50, 64],
+        iconAnchor: [22, 94],
+        shadowAnchor: [4, 62],
+        popupAnchor: [-3, -76]
+    }
+});
+
+var unnotedBakeryIcon = new BakeryIcon({ iconUrl: unnoted_bakery_icon_path }),
+    badBakeryIcon = new BakeryIcon({ iconUrl: bad_bakery_icon_path }),
+    mediumBakeryIcon = new BakeryIcon({ iconUrl: medium_bakery_icon_path }),
+    goodBakeryIcon = new BakeryIcon({ iconUrl: good_bakery_icon_path });
+
 var feature_group = L.geoJson(gjson, {
-    onEachFeature: onEachFeature
+    onEachFeature: onEachFeature,
+    pointToLayer: pointToLayer
 })
 
 feature_group.addTo(bakeries_lyr).on("click", signal_markup_clicked);
@@ -176,7 +206,7 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend', function(e) {
+map.on('moveend', function (e) {
     // Add points when moving on map. Limited to 500
     if (gjson.features.lenght > 200) {
         return;
