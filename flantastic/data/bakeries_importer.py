@@ -2,7 +2,7 @@ import csv
 from django.contrib.gis.geos import Point
 
 from flantastic.models import Bakerie
-from .definitions import TMP_CSV, DELIMITER
+from flantastic.data.definitions import TMP_CSV, DELIMITER
 
 
 def import_bakeries():

@@ -1,0 +1,1 @@
+# Modules aims to be called within the django manage.py cli

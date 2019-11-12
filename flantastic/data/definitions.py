@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-CSV_LINK = "http://data.cquest.org/geo_sirene/"
+CSV_LINK = "http://data.cquest.org/geo_sirene/" + \
 "last/etablissements_actifs.csv.gz"
 CHUNK_SIZE = 2000
 COMPRESSION = "gzip"

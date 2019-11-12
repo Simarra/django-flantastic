@@ -8,7 +8,6 @@ authors = ["Loic MARTEL"]
 python = "^3.6"
 Django = "^2.2"
 pandas = "^0.25.1"
-wget = "^3.2"
 django-leaflet = "^0.24.0"
 
 [tool.poetry.dev-dependencies]
