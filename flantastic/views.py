@@ -18,8 +18,10 @@ def _get_bakeries_gjson_per_user(user_name: str, user_pos: Point) -> dict:
     """
     Gen a geojson containing bakeries and votes related.
     """
-
-    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+    if settings.FLANTASTIC_CLOSEST_ITEMS_NB:
+        CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+    else:
+        CLOSEST_NB_ITEMS = 20 # default val
 
     # Get all votes populated per user
     user_votes_qset = Vote.objects.filter(
@@ -108,7 +110,10 @@ def bakeries_arround(request, id_not_to_get: str,
     # the presents id of the map
     bbox = Polygon(bbox)
 
-    CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+    if settings.FLANTASTIC_CLOSEST_ITEMS_NB:
+        CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+    else:
+        CLOSEST_NB_ITEMS = 20
 
     # Get closest bakeries limit 20 and in bbox
     bakeries_qset = Bakerie.objects.annotate(

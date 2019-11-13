@@ -62,6 +62,6 @@ env path="${path}:/root/.poetry/bin"
 # switch back to dialog for any ad-hoc use of apt-get
 
 WORKDIR /usr/local/
-ADD ./* /usr/local/
+COPY . /usr/local/
 
-run /root/.poetry/bin/poetry install
+run /root/.poetry/bin/poetry install --no-dev

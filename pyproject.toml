@@ -1,14 +1,28 @@
 [tool.poetry]
-name = "flantastic"
+name = "django-flantastic"
 version = "0.1.0"
-description = ""
+description = "GeoDjango app flantastic wich helps to find the best puddings."
 authors = ["Loic MARTEL"]
+keywords = ["geo", "pudding", "flan", "french", "martel"]
+homepage = "https://github.com/Simarra/flantastic"
+repository = "https://github.com/Simarra/flantastic"
+classifiers = [
+    "Environment :: Web",
+    "Framework :: Django",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+include = [
+    "LICENSE",
+]
+license = "GPL3"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.6"
 Django = "^2.2"
 pandas = "^0.25.1"
-django-leaflet = "^0.24.0"
 psycopg2 = "^2.8"
 tqdm = "^4.36.1"
 
