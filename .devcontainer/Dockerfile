@@ -33,11 +33,12 @@ RUN apt-get -y install gdal-bin \
     python3-dev \
     libgdal-dev \
     binutils \
+    # libpq \
     wget \
     curl \
-    libspatialite-dev \
+    # libspatialite-dev \
     python3-venv \
-    libsqlite3-mod-spatialite \
+    # libsqlite3-mod-spatialite \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y

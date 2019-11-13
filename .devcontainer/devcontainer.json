@@ -2,7 +2,9 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/master/containers/debian-9-git
 {
     "name": "Geodjango Debian",
-    "dockerFile": "Dockerfile",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
     // The optional 'runArgs' property can be used to specify additional runtime arguments.
     // Mount your .ssh folder to /root/.ssh-localhost so we can copy its contents
     "runArgs": [
