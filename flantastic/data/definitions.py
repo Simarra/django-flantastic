@@ -34,5 +34,6 @@ COLS_TO_KEEP = ['siren',
                 'geo_id',
                 'geo_ligne',
                 'geo_l4',
+                'l1_normalisee',
                 'geo_l5']
 DELIMITER = ","

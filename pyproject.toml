@@ -9,6 +9,7 @@ python = "^3.6"
 Django = "^2.2"
 pandas = "^0.25.1"
 django-leaflet = "^0.24.0"
+tqdm = "^4.36.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
