@@ -16,7 +16,7 @@ classifiers = [
 include = [
     "LICENSE",
 ]
-license = "GPL3"
+license = "GPL"
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -25,6 +25,7 @@ Django = "^2.2"
 pandas = "^0.25.1"
 psycopg2 = "^2.8"
 tqdm = "^4.36.1"
+requests = "^2.22"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
