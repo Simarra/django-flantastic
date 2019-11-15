@@ -34,8 +34,8 @@ script:
 
 before_deploy:
   - poetry config repositories.testpypi https://test.pypi.org/simple
-  - if [ $TRAVIS_BRANCH != $TRAVIS_PULL_REQUEST_BRANCH ] && [$TRAVIS_BRANCH = 'develop' ]; then poetry config http-basic.testpypi $PYPINAME $PYPIPASSWORD fi
-  - if [ $TRAVIS_BRANCH != $TRAVIS_PULL_REQUEST_BRANCH ] && [$TRAVIS_BRANCH = 'master' ]; then  poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD fi
+  - poetry config http-basic.testpypi $PYPINAME $PYPIPASSWORD
+  # - poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD
   - poetry build
 
 deploy:
@@ -45,8 +45,8 @@ deploy:
     branch: develop
     condition: "$TRAVIS_PYTHON_VERSION == 3.8"
 
-  provider: script
-  script: poetry publish -r pypi
-  on:
-    branch: master
-    condition: "$TRAVIS_PYTHON_VERSION == 3.8"
+  # provider: script
+  # script: poetry publish -r pypi
+  # on:
+  #   branch: master
+  #   condition: "$TRAVIS_PYTHON_VERSION == 3.8"
