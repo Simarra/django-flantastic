@@ -5,6 +5,7 @@ __pycache__/
 datadump.json
 # C extensions
 *.so
+mysite/
 
 # Distribution / packaging
 .Python
