@@ -1,5 +1,8 @@
 [tool.poetry]
 name = "django-flantastic"
+packages = [
+    {include = "flantastic"}
+]
 version = "0.1.0"
 description = "GeoDjango app flantastic wich helps to find the best puddings."
 authors = ["Loic MARTEL"]
@@ -13,10 +16,17 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-include = [
-    "LICENSE",
+exclude = [
+    "mysite/",
+    ".*",
+    "db.sqlite3",
+    "Dockerfile"
 ]
-license = "GPL"
+include = ["flantastic/static/**/*",
+            "flantastic/templates/**/*",
+            "README.md",
+            "LICENCE"]
+license = "BSD-3-Clause"
 readme = "README.md"
 
 [tool.poetry.dependencies]
