@@ -34,7 +34,7 @@ script:
 
 before_deploy:
   - poetry config repositories.testpypi https://test.pypi.org/simple
-  - poetry config http-basic.testpypi $PYPINAME $PYPIPASSWORD
+  - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
   # - poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD
   - poetry build
 
