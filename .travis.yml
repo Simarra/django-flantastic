@@ -34,19 +34,21 @@ script:
 
 before_deploy:
   - poetry build
+  - poetry config repositories.testpypi https://test.pypi.org/legacy/
+  - poetry config repositories.pypi https://pypi.org/legacy/
+  - poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD
+  - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
 
 deploy:
-  provider: script
-  script: 
-    - poetry config repositories.testpypi https://test.pypi.org/simple
-    - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
-    - poetry publish -r testpypi
-  on:
-    branch: develop
-    condition: "$TRAVIS_PYTHON_VERSION == 3.8"
-
-  # provider: script
-  # script: poetry publish -r pypi
-  # on:
-  #   branch: master
-  #   condition: "$TRAVIS_PYTHON_VERSION == 3.8"
+  - provider: script
+    skip_cleanup: true
+    script: poetry publish -r testpypi
+    on:
+      branch: all_branch
+      condition: $TRAVIS_PYTHON_VERSION == 3.8 && $TRAVIS_BRANCH =~ ^Release\/v
+  - provider: script
+    skip_cleanup: true
+    script: poetry publish
+    on:
+      branch: master
+      condition: "$TRAVIS_PYTHON_VERSION == 3.8"

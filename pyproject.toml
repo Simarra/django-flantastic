@@ -3,14 +3,14 @@ name = "django-flantastic"
 packages = [
     {include = "flantastic"}
 ]
-version = "0.1.0"
+version = "0.1.1"
 description = "GeoDjango app flantastic wich helps to find the best puddings."
 authors = ["Loic MARTEL"]
 keywords = ["geo", "pudding", "flan", "french", "martel"]
 homepage = "https://github.com/Simarra/flantastic"
 repository = "https://github.com/Simarra/flantastic"
+documentation = "https://github.com/Simarra/flantastic"
 classifiers = [
-    "Environment :: Web",
     "Framework :: Django",
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Documentation",
