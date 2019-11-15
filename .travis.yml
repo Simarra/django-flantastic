@@ -33,14 +33,14 @@ script:
   - poetry run python quicktest.py flantastic --db={postgres}
 
 before_deploy:
-  - poetry config repositories.testpypi https://test.pypi.org/simple
-  - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
-  # - poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD
   - poetry build
 
 deploy:
   provider: script
-  script: poetry publish -r testpypi
+  script: 
+    - poetry config repositories.testpypi https://test.pypi.org/simple
+    - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
+    - poetry publish -r testpypi
   on:
     branch: develop
     condition: "$TRAVIS_PYTHON_VERSION == 3.8"
