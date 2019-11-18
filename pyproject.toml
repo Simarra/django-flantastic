@@ -7,9 +7,9 @@ version = "0.1.1"
 description = "GeoDjango app flantastic wich helps to find the best puddings."
 authors = ["Loic MARTEL"]
 keywords = ["geo", "pudding", "flan", "french", "martel"]
-homepage = "https://github.com/Simarra/flantastic"
-repository = "https://github.com/Simarra/flantastic"
-documentation = "https://github.com/Simarra/flantastic"
+homepage = "https://github.com/Simarra/django-flantastic"
+repository = "https://github.com/Simarra/django-flantastic"
+documentation = "https://github.com/Simarra/django-flantastic"
 classifiers = [
     "Framework :: Django",
     "Operating System :: OS Independent",
