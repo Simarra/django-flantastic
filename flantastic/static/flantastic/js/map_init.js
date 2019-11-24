@@ -37,7 +37,7 @@ function getPkInView() {
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
         // layer.bindPopup(feature.properties.enseigne);
-        layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [0, -40], direction: "top" });
+        layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [-10, 0], direction: "auto" });
     }
 }
 
@@ -164,7 +164,7 @@ var gjson = {
 
 var BakeryIcon = L.Icon.extend({
     options: {
-        iconSize: [88, 70],
+        iconSize: [42, 35],
         shadowSize: [50, 64],
         // iconAnchor: [88, 35],
         shadowAnchor: [4, 62],
