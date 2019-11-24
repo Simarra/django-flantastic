@@ -80,7 +80,8 @@ function signal_markup_clicked(e) {
     // Change style of clicked markup
     // Open nav
     // call slot for form update
-    slot_markup_clicked(e.layer.feature.properties)
+    console.log(e.layer._leaflet_id)
+    slot_markup_clicked(e.layer)
 }
 
 function signal_empty_map_clicked(e) {
@@ -96,7 +97,7 @@ async function add_closest_bakeries_json(longlat, id_not_to_get, bbox_ne, bbox_s
     let res = await fetch(formated_url);
     let json_res = await res.json();
 
-    add_data_to_gjson(json_res);
+    add_data_to_layer(json_res);
 
 }
 
@@ -114,10 +115,7 @@ function onLocationFound(e) {
     add_closest_bakeries_json(latlong, id_not_to_get, bbox_ne, bbox_sw);
 }
 
-function add_data_to_gjson(json_to_add) {
-    for (let feat_id in json_to_add.features) {
-        gjson.features.push(json_to_add.features[feat_id])
-    }
+function add_data_to_layer(json_to_add) {
     feature_group.addData(json_to_add)
 }
 
@@ -127,7 +125,7 @@ async function set_user_bakeries() {
         let res = await fetch(user_bakeries_url);
         let json_res = await res.json();
 
-        add_data_to_gjson(json_res);
+        add_data_to_layer(json_res);
     }
 }
 
@@ -152,9 +150,6 @@ var baseMaps = {
     "osm": osm
 };
 
-// Geojson containg bakeries data linked to the markers.
-// TODO: Define the structure of the gjson here.
-// TODO: So the methods will just add elts to existing structure
 var bakeries_lyr = L.layerGroup([]);
 var overlayMaps = {
     "Boulangeries": bakeries_lyr
@@ -210,7 +205,7 @@ map.locate({
 
 map.on('moveend', function (e) {
     // Add points when moving on map. Limited to 500
-    if (gjson.features.lenght > 200) {
+    if (feature_group.getLayers().lenght > 200) {
         return;
     }
     if (map.getZoom() < 17) {

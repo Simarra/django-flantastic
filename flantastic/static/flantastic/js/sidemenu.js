@@ -1,6 +1,6 @@
 var stars_radios = document.getElementsByClassName("gout_stars_radio");
 
-var current_bakerie_id = null;
+var current_bakerie_leaflet_id = null;
 var current_bakerie_global_note = null;
 
 /* Set the width of the side navigation to 250px */
@@ -29,25 +29,24 @@ function closeNav() {
 }
 
 
-function slot_markup_clicked(properties) {
+function slot_markup_clicked(lyr) {
     // 1. Show pannel
     openNav()
         // 3. Update form
-    document.getElementById("enseigne").value = properties.enseigne;
-    document.getElementById("commentaire").value = properties.commentaire;
     // set the id of bakerie in a global variable to get it later.
-    current_bakerie_id = properties.pk;
-
+    current_bakerie_leaflet_id = lyr._leaflet_id
+    document.getElementById("enseigne").value = lyr.feature.properties.enseigne;
+    document.getElementById("commentaire").value = lyr.feature.properties.commentaire;
 
     let stars_elts = ["gout", "apparence", "pate", "texture"]
     for (let star_elt of stars_elts) {
-        if (properties[star_elt] === null) {
+        if (lyr.feature.properties[star_elt] === null) {
             let current_elt = document.getElementsByName("stars_" + star_elt)
             for (let rad of current_elt) {
                 rad.checked = false;
             }
         } else {
-            document.getElementById(star_elt + properties[star_elt]).checked = true;
+            document.getElementById(star_elt + lyr.feature.properties[star_elt]).checked = true;
         }
     }
 }
@@ -70,7 +69,7 @@ async function formSubmit() {
         apparence: document.querySelector('input[name="stars_apparence"]:checked').value,
         texture: document.querySelector('input[name="stars_texture"]:checked').value,
         pate: document.querySelector('input[name="stars_pate"]:checked').value,
-        pk: current_bakerie_id,
+        pk: feature_group.getLayer(current_bakerie_leaflet_id).feature.properties.pk,
         csrfmiddlewaretoken: document.querySelector('input[name=csrfmiddlewaretoken]').value,
         action: 'post'
     });
@@ -100,27 +99,16 @@ async function formSubmit() {
 
 function refresh_updated_point(bak_data) {
     // Method used to refresh the point properties in the map
-
     // Get the updated point
-    let bak_leaflet_id = get_bakerie_from_gjson(bak_data.pk);
-    gjson.features[bak_leaflet_id].properties.enseigne = bak_data.enseigne;
-    gjson.features[bak_leaflet_id].properties.commentaire = bak_data.commentaire;
-    gjson.features[bak_leaflet_id].properties.gout = bak_data.gout;
-    gjson.features[bak_leaflet_id].properties.apparence = bak_data.apparence;
-    gjson.features[bak_leaflet_id].properties.texture = bak_data.texture;
-    gjson.features[bak_leaflet_id].properties.pate = bak_data.pate;
-    gjson.features[bak_leaflet_id].properties.global_note = bak_data.global_note;
+
+    let lyr_to_up = feature_group.getLayer(current_bakerie_leaflet_id)
+    lyr_to_up.feature.properties.enseigne = bak_data.enseigne;
+    lyr_to_up.feature.properties.commentaire = bak_data.commentaire;
+    lyr_to_up.feature.properties.gout = bak_data.gout;
+    lyr_to_up.feature.properties.apparence = bak_data.apparence;
+    lyr_to_up.feature.properties.texture = bak_data.texture;
+    lyr_to_up.feature.properties.pate = bak_data.pate;
+    lyr_to_up.feature.properties.global_note = bak_data.global_note;
 
 }
 
-
-function get_bakerie_from_gjson(bakerie_id) {
-    // Extract bakerie id from gjson;
-    for (let the_id in gjson.features) {
-        if (parseInt(gjson.features[the_id].properties.pk) == parseInt(bakerie_id)) {
-            return the_id;
-        }
-    }
-    throw new Error("Bakerie not found")
-
-}
