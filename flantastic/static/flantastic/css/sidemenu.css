@@ -30,6 +30,7 @@
  textarea {
      font-family: inherit;
      border: none;
+     font-size: 18px;
  }
  
  .btn-primary {
@@ -49,9 +50,20 @@
  
  .label-quality {
      padding-top: 1em;
+     font-size: 15px;
+ }
+
+ @media screen and (min-height: 600px) {
+     .label-quality {
+     padding-top: 1em;
      font-size: 22px;
  }
- 
+}
+
+/* .enseigne {
+    height: 200px;
+} */
+
  .sidenav a {
      padding: 8px 8px 8px 32px;
      text-decoration: none;
@@ -74,6 +86,7 @@
      font-size: 36px;
      margin-left: 50px;
  }
+
  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
  
  #main {
@@ -82,7 +95,7 @@
  }
  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
  
- @media screen and (max-height: 450px) {
+ @media screen and (max-height: 600px) {
      .sidenav {
          padding-top: 15px;
      }
@@ -95,9 +108,15 @@
  .rating {
      display: inline-block;
      position: relative;
+     height: 25;
+     line-height: 25px;
+     font-size: 25px;
+ }
+ @media screen and (min-height: 600px) {
+     .rating {
      height: 50px;
      line-height: 50px;
-     font-size: 50px;
+     }
  }
  
  .rating label {
@@ -142,6 +161,7 @@
  .rating label .icon {
      float: left;
      color: transparent;
+     font-size: 50px;
  }
  
  .rating label:last-child .icon {

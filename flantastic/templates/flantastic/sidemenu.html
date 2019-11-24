@@ -12,9 +12,7 @@
 <div   id="mySidenav" class="sidenav">
     {% csrf_token %}
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
-      <label class="label-quality">Enseigne</label>
-      <input type="text" class="form-control" id="enseigne" placeholder="enseigne">
+    <input type="text" class="form-control" id="enseigne" placeholder="enseigne">
 
 <label class="label-quality">Goût:</label>
 <div class="gout_stars_radio rating">
@@ -153,10 +151,10 @@
   </label>
   </div>
 
-  <div class="form-group">
-    <label class="label-quality">Commentaire</label>
+    <div class="form-group">
+      <label class="label-quality">Commentaire</label>
+    </div>
     <textarea class="form-control" id="commentaire" placeholder="commentaire"></textarea>
-  </div>
 
     <button onclick="formSubmit()" class="btn btn-primary">Soumettre</button>
     </div>
