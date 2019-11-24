@@ -37,7 +37,7 @@ function getPkInView() {
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.enseigne) {
         // layer.bindPopup(feature.properties.enseigne);
-        layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [0, 0] });
+        layer.bindTooltip(feature.properties.enseigne, { permanent: true, className: "my-label", offset: [0, -40], direction: "top" });
     }
 }
 
@@ -164,11 +164,11 @@ var gjson = {
 
 var BakeryIcon = L.Icon.extend({
     options: {
-        iconSize: [38, 95],
+        iconSize: [88, 70],
         shadowSize: [50, 64],
-        iconAnchor: [22, 94],
+        // iconAnchor: [88, 35],
         shadowAnchor: [4, 62],
-        popupAnchor: [-3, -76]
+        popupAnchor: [40, -76]
     }
 });
 
