@@ -1,0 +1,164 @@
+{% load static %} 
+
+
+<link rel="stylesheet" href="{% static "flantastic/css/sidemenu.css" %}">
+
+<script>
+    // Url to the view to edit bakerie
+    var post_url = '{% url "edit_bakerie" %}';
+</script>
+
+
+<div   id="mySidenav" class="sidenav">
+    {% csrf_token %}
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <input type="text" class="form-control" id="enseigne" placeholder="enseigne">
+
+<label class="label-quality">Goût:</label>
+<div class="gout_stars_radio rating">
+<label>
+    <input id="gout1" type="radio" name="stars_gout" value="1" />
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="gout2" type="radio" name="stars_gout" value="2" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="gout3" type="radio" name="stars_gout" value="3" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>   
+  </label>
+  <label>
+    <input id="gout4" type="radio" name="stars_gout" value="4" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="gout5" type="radio" name="stars_gout" value="5" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+</div>
+
+
+<label class="label-quality">Apparence:</label>
+<div class="apparence_stars_radio rating">
+<label>
+    <input id="apparence1" type="radio" name="stars_apparence" value="1" />
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="apparence2" type="radio" name="stars_apparence" value="2" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="apparence3" type="radio" name="stars_apparence" value="3" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>   
+  </label>
+  <label>
+    <input id="apparence4" type="radio" name="stars_apparence" value="4" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="apparence5" type="radio" name="stars_apparence" value="5" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+</div>
+
+<label class="label-quality">Pâte:</label>
+<div class="pate_stars_radio rating">
+<label>
+    <input id="pate1" type="radio" name="stars_pate" value="1" />
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="pate2" type="radio" name="stars_pate" value="2" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="pate3" type="radio" name="stars_pate" value="3" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>   
+  </label>
+  <label>
+    <input id="pate4" type="radio" name="stars_pate" value="4" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="pate5" type="radio" name="stars_pate" value="5" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+</div>
+
+<label class="label-quality">Texture</label>
+<div class="texture_stars_radio rating">
+<label>
+    <input id="texture1" type="radio" name="stars_texture" value="1" />
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="texture2" type="radio" name="stars_texture" value="2" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="texture3" type="radio" name="stars_texture" value="3" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>   
+  </label>
+  <label>
+    <input id="texture4" type="radio" name="stars_texture" value="4" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input id="texture5" type="radio" name="stars_texture" value="5" />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  </div>
+
+    <div class="form-group">
+      <label class="label-quality">Commentaire</label>
+    </div>
+    <textarea class="form-control" id="commentaire" placeholder="commentaire"></textarea>
+
+    <button onclick="formSubmit()"  id="btn-submit">Soumettre</button>
+    </div>
+
+
+<script type="text/javascript" src="{% static "flantastic/js/sidemenu.js" %}">
+</script>

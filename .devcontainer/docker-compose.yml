@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    image: mdillon/postgis:11-alpine
+    restart: unless-stopped
+    volumes:
+        - pg-data/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  app:
+    # Uncomment the next line to use a non-root user. On Linux, this will prevent
+    # new files getting created as root, but you may need to update the USER_UID
+    # and USER_GID in .devcontainer/Dockerfile to match your user if not 1000.
+    # user: vscode
+
+    build: 
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ..:/workspace
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    
+    depends_on: 
+      - db
+    
+volumes:
+  pg-data:

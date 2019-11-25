@@ -1,30 +1,34 @@
 {% extends "flantastic/base.html" %}
-{% load leaflet_tags %}
-
-{% block extra_assets %}
-    {% leaflet_js %}
-    {% leaflet_css %}
-{% endblock %}
-
 {% load static %} 
 
-{% block content %}
+{% block extra_assets %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+{% endblock %}
+
+
+{% block map_layer %}
+{% comment %} Use meta in order to avoid phone resetting css. {% endcomment %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<div id="mapid"></div>
 
 <link rel="stylesheet" href="{% static "flantastic/css/mapstyle.css" %}">
+
+<script>
+    // Url to the view rendering bakeries as geojson.
+    var dataurl = '{% url "base_api_url" %}';
+    var user_bakeries_url = '{% url "user_bakeries" %}';
+    var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+
+    var unnoted_bakery_icon_path= '{% static "flantastic/icons/unnoted_bakery.png" %}'
+    var bad_bakery_icon_path= '{% static "flantastic/icons/bad_bakery.png" %}'
+    var medium_bakery_icon_path= '{% static "flantastic/icons/medium_bakery.png" %}'
+    var good_bakery_icon_path= '{% static "flantastic/icons/good_bakery.png" %}'
+</script>
 
 <script type="text/javascript" src="{% static "flantastic/js/map_init.js" %}">
 </script>
 
-<script>
-    var dataurl = '{% url "map" %}';
-</script>
 
-{% leaflet_map "map" callback="window.map_init" %}
-
-<script>
-    // Insert closest bakeries
-    window.insert_closest_bakeries_json(dataurl, map);
-
-</script>
 
 {% endblock %}

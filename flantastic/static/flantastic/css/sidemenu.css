@@ -1,0 +1,179 @@
+ /* The side navigation menu */
+ 
+ .sidenav {
+     height: 100%;
+     /* 100% Full-height */
+     width: 0;
+     /* 0 width - change this with JavaScript */
+     position: fixed;
+     /* Stay in place */
+     z-index: 1000;
+     /* Stay on top */
+     top: 0;
+     /* Stay at the top */
+     left: 0;
+     background-image: linear-gradient(to bottom right, var(--secondary-bg-color), var(--main-bg-color));
+     /* Black*/
+     overflow-x: hidden;
+     /* Disable horizontal scroll */
+     padding-top: 60px;
+     /* Place content 60px from the top */
+     transition: 0.5s;
+     display: flex;
+     flex-direction: column;
+     /* 0.5 second transition effect to slide in the sidenav */
+ }
+ /* The navigation menu links */
+ 
+ input,
+ select,
+ textarea {
+     font-family: inherit;
+     border: none;
+     font-size: 18px;
+ }
+ 
+ #btn-submit {
+     background: linear-gradient(to right, var(--main-bg-color), var(--secondary-font-color));
+     border-radius: 6px;
+     outline: 0;
+     font-family: inherit;
+     font-size: 20px;
+     padding: 15px 30px;
+     margin-top: 2em;
+ }
+ 
+ #btn-submit:hover {
+     background: linear-gradient(to right, var(--secondary-font-color), var(--main-bg-color));
+     color: var(--primary-font-color);
+ }
+ 
+ .label-quality {
+     padding-top: 1em;
+     font-size: 15px;
+ }
+
+ @media screen and (min-height: 600px) {
+     .label-quality {
+     padding-top: 1em;
+     font-size: 22px;
+ }
+}
+
+/* .enseigne {
+    height: 200px;
+} */
+
+ .sidenav a {
+     padding: 8px 8px 8px 32px;
+     text-decoration: none;
+     font-size: 25px;
+     color: #818181;
+     display: block;
+     transition: 0.3s;
+ }
+ /* When you mouse over the navigation links, change their color */
+ 
+ .sidenav a:hover {
+     color: #f1f1f1;
+ }
+ /* Position and style the close button (top right corner) */
+ 
+ .sidenav .closebtn {
+     position: absolute;
+     top: 0;
+     right: 25px;
+     font-size: 36px;
+     margin-left: 50px;
+ }
+
+ /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+ 
+ #main {
+     transition: margin-left .5s;
+     padding: 20px;
+ }
+ /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+ 
+ @media screen and (max-height: 600px) {
+     .sidenav {
+         padding-top: 15px;
+     }
+     .sidenav a {
+         font-size: 18px;
+     }
+ }
+ /* RATING SYSTEM */
+ 
+ .rating {
+     display: inline-block;
+     position: relative;
+     height: 25;
+     line-height: 25px;
+     font-size: 25px;
+ }
+ @media screen and (min-height: 600px) {
+     .rating {
+     height: 50px;
+     line-height: 50px;
+     }
+ }
+ 
+ .rating label {
+     position: absolute;
+     top: 0;
+     left: 0;
+     height: 100%;
+     cursor: pointer;
+ }
+ 
+ .rating label:last-child {
+     position: static;
+ }
+ 
+ .rating label:nth-child(1) {
+     z-index: 5;
+ }
+ 
+ .rating label:nth-child(2) {
+     z-index: 4;
+ }
+ 
+ .rating label:nth-child(3) {
+     z-index: 3;
+ }
+ 
+ .rating label:nth-child(4) {
+     z-index: 2;
+ }
+ 
+ .rating label:nth-child(5) {
+     z-index: 1;
+ }
+ 
+ .rating label input {
+     position: absolute;
+     top: 0;
+     left: 0;
+     opacity: 0;
+ }
+ 
+ .rating label .icon {
+     float: left;
+     color: transparent;
+     font-size: 50px;
+ }
+ 
+ .rating label:last-child .icon {
+     color: #8B7A5E;
+ }
+ 
+ .rating:not(:hover) label input:checked~.icon,
+ .rating:hover label:hover input~.icon {
+     color: #9FD6D2;
+ }
+ 
+ .rating label input:focus:not(:checked)~.icon:last-child {
+     color: #000;
+     text-shadow: 0 0 5px #09f;
+ }

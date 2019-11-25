@@ -2,9 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+datadump.json
 # C extensions
 *.so
+mysite/
 
 # Distribution / packaging
 .Python

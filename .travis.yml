@@ -1,0 +1,54 @@
+sudo: required
+dist: xenial
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+cache: pip
+
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10-postgis-2.5
+      - postgresql-10-postgis-2.5-scripts
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y libproj-dev libgeos-dev libspatialite-dev libsqlite3-mod-spatialite
+
+install:
+  - pip install --upgrade pip
+  - pip install poetry
+  - poetry install -v
+
+before_script:
+  - psql -c 'create database test_db;' -U postgres
+  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d test_db
+
+script:
+  # Both sqlite and postgres testing.
+  - poetry run python quicktest.py flantastic --db={sqlite}
+  - poetry run python quicktest.py flantastic --db={postgres}
+
+before_deploy:
+  - poetry build
+  - poetry config repositories.testpypi https://test.pypi.org/legacy/
+  - poetry config repositories.pypi https://pypi.org/legacy/
+  - poetry config http-basic.pypi $PYPINAME $PYPIPASSWORD
+  - poetry config http-basic.testpypi $DEVPYPINAME $DEVPYPIPASSWORD
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: poetry publish -r testpypi
+    on:
+      branch: all_branch
+      condition: $TRAVIS_PYTHON_VERSION == 3.8 && $TRAVIS_BRANCH =~ /^Release\/.*$/
+  - provider: script
+    skip_cleanup: true
+    script: poetry publish
+    on:
+      branch: master
+      condition: "$TRAVIS_PYTHON_VERSION == 3.8"

@@ -1,9 +1,16 @@
-<body>
-    <div class="page-header">
-        <h1><a href="/">COUCOU</a></h1>
-    </div>
-            {% block extra_assets %}
-            {% endblock %}
-            {% block content %}
-            {% endblock %}
-</body>
+{% load static %}
+    <link rel="stylesheet" href="{% static "flantastic/css/style.css" %}">
+<link href="https://fonts.googleapis.com/css?family=Handlee&display=swap" rel="stylesheet"> 
+
+    {% include "flantastic/headerbar.html"%}
+
+    {% block extra_assets %}
+    {% endblock %} 
+
+
+    {% include "flantastic/sidemenu.html" %}
+
+    {% block map_layer %}
+    {% endblock %}
+
+

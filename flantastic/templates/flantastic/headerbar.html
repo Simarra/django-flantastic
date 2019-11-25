@@ -1,0 +1,16 @@
+{% load static %}
+
+
+<link rel="stylesheet" href="{% static "flantastic/css/headerbar.css" %}">
+
+<header>
+    <ul class="navigation">
+        {% if user.is_authenticated %}
+        <li><a> {{ user.username }}</a></li>
+        <li><a href='{% url "logout" %}'>Logout</a></li>
+        {% else %}
+        <li><a href='{% url "login" %}'>Login</a></li>
+        {% endif %}
+        <li><a href="#">About</a></li>
+    </ul>
+</header>

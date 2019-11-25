@@ -1,7 +1,9 @@
 from django.contrib.gis import admin
 
-from .models import Bakeries
+from .models import Bakerie, Vote
 
 # Register your models here.
 
-admin.site.register(Bakeries, admin.GeoModelAdmin)
+
+admin.site.register(Bakerie, admin.GeoModelAdmin)
+admin.site.register(Vote)
