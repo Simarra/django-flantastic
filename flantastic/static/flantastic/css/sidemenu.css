@@ -33,7 +33,7 @@
      font-size: 18px;
  }
  
- .btn-submit {
+ #btn-submit {
      background: linear-gradient(to right, var(--main-bg-color), var(--secondary-font-color));
      border-radius: 6px;
      outline: 0;
@@ -43,7 +43,7 @@
      margin-top: 2em;
  }
  
- .btn-submit:hover {
+ #btn-submit:hover {
      background: linear-gradient(to right, var(--secondary-font-color), var(--main-bg-color));
      color: var(--primary-font-color);
  }

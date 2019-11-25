@@ -45,7 +45,7 @@ deploy:
     script: poetry publish -r testpypi
     on:
       branch: all_branch
-      condition: $TRAVIS_PYTHON_VERSION == 3.8 && $TRAVIS_BRANCH =~ ^Release\/v
+      condition: $TRAVIS_PYTHON_VERSION == 3.8 && $TRAVIS_BRANCH =~ /^Release\/.*$/
   - provider: script
     skip_cleanup: true
     script: poetry publish
