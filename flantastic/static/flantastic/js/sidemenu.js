@@ -5,6 +5,12 @@ var current_bakerie_global_note = null;
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
+    if (is_authenticated == true) {
+        document.getElementById("btn-submit").style.visibility = 'visible';
+    } else {
+        document.getElementById("btn-submit").style.visibility = 'hidden';
+    }
+
     document.getElementById("mySidenav").style.width = "250px";
 }
 
@@ -32,7 +38,7 @@ function closeNav() {
 function slot_markup_clicked(lyr) {
     // 1. Show pannel
     openNav()
-        // 3. Update form
+    // 3. Update form
     // set the id of bakerie in a global variable to get it later.
     current_bakerie_leaflet_id = lyr._leaflet_id
     document.getElementById("enseigne").value = lyr.feature.properties.enseigne;
