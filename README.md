@@ -4,7 +4,11 @@
 
 [![PyPI version](https://badge.fury.io/py/django-flantastic.svg)](https://badge.fury.io/py/django-flantastic)
 
+
 An app to found the best puddings of France!
+
+![cluster map example](.github/flantasticshot.jpg)
+
 
 ## Purpose
 This is a web application wich shows a map with points wich are bakeries. Each bakerie has notation based on some criterias, like taste, texture...
