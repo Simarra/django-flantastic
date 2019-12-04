@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+
+{% load static %}
+<link rel="stylesheet" href="{% static "flantastic/css/style.css" %}">
+<link rel="stylesheet" href="{% static "flantastic/css/signup.css" %}">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<body>
+
+  <div id="form-container">
+  <h1>S'enregistrer</h1>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        <div class="input_container">
+        {{ field }}
+        </div>
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <button id="submit-btn" type="submit">Sign up</button>
+  </form>
+  </div>
+  </body>

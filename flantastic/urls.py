@@ -21,5 +21,6 @@ urlpatterns = [
     path('logout/',
          auth_views.LogoutView.as_view(
              template_name='flantastic/logout.html'), name='logout'),
-    path('editbakerie', views.edit_bakerie, name='edit_bakerie')
+    path('editbakerie', views.edit_bakerie, name='edit_bakerie'),
+    path('signup', views.signup, name='signup')
 ]
