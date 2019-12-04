@@ -85,7 +85,7 @@ function signal_markup_clicked(e) {
     // Change style of clicked markup
     // Open nav
     // call slot for form update
-    console.log(e.layer._leaflet_id)
+    // console.log(e.layer._leaflet_id)
     slot_markup_clicked(e.layer)
 }
 
