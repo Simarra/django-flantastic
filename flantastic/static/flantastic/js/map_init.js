@@ -8,7 +8,7 @@ function geoloc_available() {
 function getFeaturesInView() {
     // Function wich retrieve data from screen bbox
     var features = [];
-    map.eachLayer(function (layer) {
+    map.eachLayer(function(layer) {
         if (layer instanceof L.Marker) {
             if (map.getBounds().contains(layer.getLatLng())) {
                 features.push(layer.feature);
@@ -45,15 +45,20 @@ function onEachFeature(feature, layer) {
 function pointToLayer(feature, layer) {
     var lat = feature.geometry.coordinates[1];
     var lon = feature.geometry.coordinates[0];
-    switch (feature.properties.global_note) {
-        case undefined:return L.marker([lat, lon], { icon: unnotedBakeryIcon });
-        case null:return L.marker([lat, lon], { icon: unnotedBakeryIcon });
-        case 0: return L.marker([lat, lon], { icon: unnotedBakeryIcon });
-        case 1: return L.marker([lat, lon], { icon: badBakeryIcon });
-        case 2:
-        case 3: return L.marker([lat, lon], { icon: mediumBakeryIcon });
-        case 4: 
-        case 5:return L.marker([lat, lon], { icon: goodBakeryIcon });
+    let x = feature.properties.global_note;
+    switch (true) {
+        case undefined:
+            return L.marker([lat, lon], { icon: unnotedBakeryIcon });
+        case null:
+            return L.marker([lat, lon], { icon: unnotedBakeryIcon });
+        case 0:
+            return L.marker([lat, lon], { icon: unnotedBakeryIcon });
+        case (x > 0 && x < 2):
+            return L.marker([lat, lon], { icon: badBakeryIcon });
+        case (x >= 2 && x < 4):
+            return L.marker([lat, lon], { icon: mediumBakeryIcon });
+        case (x >= 4):
+            return L.marker([lat, lon], { icon: goodBakeryIcon });
     }
 }
 
@@ -203,7 +208,7 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend', function (e) {
+map.on('moveend', function(e) {
     // Add points when moving on map. Limited to 500
     if (feature_group.getLayers().lenght > 200) {
         return;

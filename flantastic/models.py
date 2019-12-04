@@ -27,7 +27,7 @@ class Bakerie(gismodels.Model):
     datemaj = models.CharField(max_length=256, null=True, default=None)
 
     modified_date = models.DateTimeField(auto_now=True, null=True)
-    global_note = models.PositiveSmallIntegerField(
+    global_note = models.FloatField(
         validators=FIVE_STARS_VALIDATOR, null=True, default=None)
 
     geom = gismodels.PointField(srid=4326)
