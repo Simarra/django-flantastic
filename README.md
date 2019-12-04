@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/Simarra/django-flantastic.svg?branch=develop)](https://travis-ci.org/Simarra/django-flantastic)
 
+[![PyPI version](https://badge.fury.io/py/django-flantastic.svg)](https://badge.fury.io/py/django-flantastic)
+
 An app to found the best puddings of France!
 
 ## Purpose
