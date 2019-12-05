@@ -3,7 +3,7 @@ name = "django-flantastic"
 packages = [
     {include = "flantastic"}
 ]
-version = "0.1.3"
+version = "0.2.1"
 description = "GeoDjango app flantastic wich helps to find the best puddings."
 authors = ["Loic MARTEL"]
 keywords = ["geo", "pudding", "flan", "french", "martel"]

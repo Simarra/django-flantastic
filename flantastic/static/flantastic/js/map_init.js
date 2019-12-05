@@ -47,11 +47,11 @@ function pointToLayer(feature, layer) {
     var lon = feature.geometry.coordinates[0];
     let x = feature.properties.global_note;
     switch (true) {
-        case undefined:
+        case (x == undefined):
             return L.marker([lat, lon], { icon: unnotedBakeryIcon });
-        case null:
+        case (x == null):
             return L.marker([lat, lon], { icon: unnotedBakeryIcon });
-        case 0:
+        case (x == 0):
             return L.marker([lat, lon], { icon: unnotedBakeryIcon });
         case (x > 0 && x < 2):
             return L.marker([lat, lon], { icon: badBakeryIcon });
