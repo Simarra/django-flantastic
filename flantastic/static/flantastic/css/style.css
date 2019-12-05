@@ -7,6 +7,9 @@
     --secondary-font-color: #D0ECEA;
     --unselect-color: #8B7A5E;
     --font-style: 'Handlee', cursive;
+    --icon_color: #6b6b6b;
+    --white-color: white;
+    --orange-color: #fca23b;
 }
 
 body {

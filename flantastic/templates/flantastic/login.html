@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html>
 
+{% load static %}
+<link rel="stylesheet" href="{% static "flantastic/css/style.css" %}">
+<link rel="stylesheet" href="{% static "flantastic/css/login.css" %}">
+
 <head>
     <title>Login</title>
 </head>
     
 <body>
-    <form method="POST">
-        {% csrf_token %}
-        <p>
-            <label>Username</label>
-            <input type="text" name="username">
-        </p>
-        <p>
-            <label>Password</label>
-            <input type="password" name="password">
-        </p>
-        <button type="submit">Login</button>
-    </form>
-
-    <p>Découvrir l'application anonymement</p>
+        <form id="form_wrapper" METHOD="POST">
+                {% csrf_token %}
+            <div id="form_left">
+                <img src="{% static "flantastic/icons/medium_bakery.png" %}" alt="computer icon">
+            </div>
+            <div id="form_right">
+                <h1>Login</h1>
+                <h2>Pseudonyme</h2>
+                <div class="input_container">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" name="username" id="field_email" class='input_field'>
+                </div>
+                <h2>Mot de passe</h2>
+                <div class="input_container">
+                    <i class="fas fa-lock"></i>
+                    <input   type="password" name="password" id="field_password" class='input_field'>
+                </div>
+                <input type="submit" id='input_submit' class='input_field'>
+                <span>Forgot <a href="#"> Username / Password ?</a></span>
+                <span id='create_account'>
+                    <a href="{% url "signup" %}">Create your account ➡ </a>
+                </span>
+            </div>
+        </form>
 </body>
     
 </html>

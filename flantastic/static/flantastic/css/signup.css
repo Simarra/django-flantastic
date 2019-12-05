@@ -1,0 +1,91 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: var(--main-bg-color);
+}
+
+#form-container {
+    /* center the image */
+    background-color: white;
+    overflow: hidden;
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+    /*centers items on the line (the x-axis by default)*/
+    align-items: center;
+    flex-direction: column;
+    /*centers items on the cross-axis (y by default)*/
+}
+
+h1 {
+    color: var(--font-color)
+}
+
+label {
+    color: var(--icon_color)
+}
+
+.input_container {
+    background-color: var(--unselect-color);
+    /* vertically align icon and text inside the div*/
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.input_container:hover {
+    background-color: var(--font-color);
+}
+
+.input_container,
+#input_submit {
+    height: 40px;
+    /* make the borders more round */
+    border-radius: 30px;
+    width: 100%;
+}
+
+input {
+    /* customize the input tag with lighter font and some padding*/
+    color: var(--orange-color);
+    background-color: inherit;
+    width: 90%;
+    border: none;
+    font-size: 1.3rem;
+    font-weight: 400;
+    /* padding-left: 30px; */
+}
+
+input:hover,
+input:focus {
+    /* remove the outline */
+    outline: none;
+}
+
+#input_submit {
+    /* submit button has a different color and different padding */
+    background-color: var(--font-color);
+    padding-left: 0;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+}
+
+#input_submit:hover {
+    background-color: var(--font-color);
+    /* simple color transition on hover */
+    transition: background-color, 1s;
+    cursor: pointer;
+}
+
+#submit-btn {
+    background-image: linear-gradient(to bottom right, var(--main-bg-color), var(--secondary-bg-color));
+    border: none;
+    border-radius: 30px;
+    height: 50px;
+    width: 90%;
+    align-content: center;
+}
