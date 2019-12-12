@@ -155,7 +155,10 @@ var baseMaps = {
     "osm": osm
 };
 
-var bakeries_lyr = L.layerGroup([]);
+var bakeries_lyr  = L.markerClusterGroup.layerSupport([]);
+
+bakeries_lyr.addTo(map).on("click", signal_markup_clicked);
+
 var overlayMaps = {
     "Boulangeries": bakeries_lyr
 };
@@ -187,10 +190,9 @@ var feature_group = L.geoJson(gjson, {
     pointToLayer: pointToLayer
 })
 
-feature_group.addTo(bakeries_lyr).on("click", signal_markup_clicked);
+feature_group.addTo(bakeries_lyr)
 
 
-bakeries_lyr.addTo(map);
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
@@ -219,7 +221,7 @@ map.on('moveend', function(e) {
 
     let pks = getPkInView();
     if (pks.length == 0) {
-        pks.push("999999")
+        pks.push("999999") // Ugly workarround. TODO: Fix API.
     }
 
     let id_not_to_get = pks.join("-");
