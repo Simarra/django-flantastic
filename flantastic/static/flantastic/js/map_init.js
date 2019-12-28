@@ -8,13 +8,12 @@ function geoloc_available() {
 function getFeaturesInView() {
     // Function wich retrieve data from screen bbox
     var features = [];
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Marker) {
-            if (map.getBounds().contains(layer.getLatLng())) {
-                features.push(layer.feature);
-            }
+    let bounds = map.getBounds()
+    bakeries_lyr.eachLayer(function (lyr) {
+        if (bounds.contains(lyr.getLatLng())) {
+            features.push(lyr)
         }
-    });
+    })
     return features;
 }
 
@@ -24,7 +23,7 @@ function getPkInView() {
     let res = [];
     for (elt of features) {
         if (elt) {
-            res.push(elt.properties.pk);
+            res.push(elt.feature.properties.pk);
         }
     }
 
@@ -155,7 +154,7 @@ var baseMaps = {
     "osm": osm
 };
 
-var bakeries_lyr  = L.markerClusterGroup.layerSupport([]);
+var bakeries_lyr = L.markerClusterGroup.layerSupport([]);
 
 bakeries_lyr.addTo(map).on("click", signal_markup_clicked);
 
@@ -210,7 +209,7 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend', function(e) {
+map.on('moveend', function (e) {
     // Add points when moving on map. Limited to 500
     if (feature_group.getLayers().lenght > 200) {
         return;
