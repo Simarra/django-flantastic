@@ -9,7 +9,7 @@ function getFeaturesInView() {
     // Function wich retrieve data from screen bbox
     var features = [];
     let bounds = map.getBounds()
-    bakeries_lyr.eachLayer(function (lyr) {
+    bakeries_lyr.eachLayer(function(lyr) {
         if (bounds.contains(lyr.getLatLng())) {
             features.push(lyr)
         }
@@ -133,7 +133,56 @@ async function set_user_bakeries() {
     }
 }
 
+// LABELGUN FUNCTIONS
+function resetLabels(markers) {
+    //labelgun function
 
+    var i = 0;
+    markers.eachLayer(function(label) {
+        addLabel(label, ++i);
+    });
+    labelEngine.update();
+
+}
+
+function addLabel(layer, id) {
+    //labelgun function
+
+    // This is ugly but there is no getContainer method on the tooltip :(
+    var label = layer.getTooltip()._source._tooltip._container;
+    if (label) {
+
+        // We need the bounding rectangle of the label itself
+        var rect = label.getBoundingClientRect();
+
+        // We convert the container coordinates (screen space) to Lat/lng
+        var bottomLeft = mymap.containerPointToLatLng([rect.left, rect.bottom]);
+        var topRight = mymap.containerPointToLatLng([rect.right, rect.top]);
+        var boundingBox = {
+            bottomLeft: [bottomLeft.lng, bottomLeft.lat],
+            topRight: [topRight.lng, topRight.lat]
+        };
+
+        // Ingest the label into labelgun itself
+        labelEngine.ingestLabel(
+            boundingBox,
+            id,
+            parseInt(Math.random() * (5 - 1) + 1), // Weight
+            label,
+            "Test " + id,
+            false
+        );
+
+        // If the label hasn't been added to the map already
+        // add it and set the added flag to true
+        if (!layer.added) {
+            layer.addTo(map);
+            layer.added = true;
+        }
+
+    }
+
+}
 
 
 
@@ -153,6 +202,16 @@ var baseMaps = {
     "watercolor": watercolor,
     "osm": osm
 };
+
+
+// Labelgun!
+// This is core of how Labelgun works. We must provide two functions, one
+// that hides our labels, another that shows the labels. These are essentially
+// callbacks that labelgun uses to actually show and hide our labels
+// In this instance we set the labels opacity to 0 and 1 respectively. 
+var hideLabel = function(label) { label.labelObject.style.opacity = 0; };
+var showLabel = function(label) { label.labelObject.style.opacity = 1; };
+labelEngine = new labelgun.default(hideLabel, showLabel);
 
 var bakeries_lyr = L.markerClusterGroup.layerSupport([]);
 
@@ -189,6 +248,16 @@ var feature_group = L.geoJson(gjson, {
     pointToLayer: pointToLayer
 })
 
+
+// For each marker lets add a label
+var i = 0; //TODO: Eliminate this uggly & useless i var
+feature_group.eachLayer(function(label) {
+    label.added = true;
+    addLabel(label, i);
+    i++;
+});
+
+
 feature_group.addTo(bakeries_lyr)
 
 
@@ -209,13 +278,15 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend', function (e) {
-    // Add points when moving on map. Limited to 500
-    if (feature_group.getLayers().lenght > 200) {
+map.on('moveend zoomend', function(e) {
+    // Add points when moving on map. Limited to 2000
+    if (feature_group.getLayers().lenght > 2000) {
+        resetLabels(feature_group);
         return;
     }
     if (map.getZoom() < 17) {
-        return
+        resetLabels(feature_group);
+        return;
     }
 
     let pks = getPkInView();
@@ -232,5 +303,15 @@ map.on('moveend', function (e) {
     let bbox_ne = _format_point_for_api(bbox._northEast.lng, bbox._northEast.lat);
     let bbox_sw = _format_point_for_api(bbox._southWest.lng, bbox._southWest.lat);
     add_closest_bakeries_json(latlong, id_not_to_get, bbox_ne, bbox_sw);
+    resetLabels(feature_group);
 
 });
+
+// labelgun when markercluster animations ends
+bakeries_lyr.on('animationend', function() {
+    resetLabels(feature_group);
+})
+
+map.fitBounds(feature_group.getBounds()); //TODO: Conflict with locate?
+
+resetLabels(feature_group);
