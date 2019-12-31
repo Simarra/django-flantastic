@@ -1,5 +1,4 @@
-
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from ..models import Bakerie, Vote
@@ -7,6 +6,7 @@ from .serializers import serialize_bakeries
 import json
 from django.conf import settings
 from typing import Tuple
+from ..definitions import BAKERIE_API_SEND_FIELDS
 
 
 def _get_long_lat(longlat: str) -> Tuple[float]:
@@ -17,29 +17,34 @@ def _get_long_lat(longlat: str) -> Tuple[float]:
     longitude, latitude = float(longlat[0]), float(longlat[1])
     return longitude, latitude
 
-def user_bakeries(request) -> JsonResponse:
+
+def user_bakeries(request: HttpRequest) -> JsonResponse:
     """
     Get bakeries related to user.
     """
     if request.user.is_authenticated:
         user_name = request.user.username
         user_votes_qset = Vote.objects.filter(
-            user__username=user_name)  # .filter(bakerie__in=closest_bakery_qset)
+            user__username=user_name
+        )  # .filter(bakerie__in=closest_bakery_qset)
         user_bakeries_qset = Bakerie.objects.filter(
-            id__in=user_votes_qset.values_list("id"))
+            id__in=user_votes_qset.values_list("id")
+        )
 
         gjson = serialize_bakeries(user_bakeries_qset, user_votes_qset)
 
         return JsonResponse(gjson)
     else:
-        raise ConnectionRefusedError(
-            "If user is not registrated, no bakeries to get")
+        raise ConnectionRefusedError("If user is not registrated, no bakeries to get")
 
 
-def bakeries_arround(request, id_not_to_get: str,
-                     longlat: str,
-                     bbox_north_east: str,
-                     bbox_south_west: str) -> JsonResponse:
+def bakeries_arround(
+    request: HttpRequest,
+    id_not_to_get: str,
+    longlat: str,
+    bbox_north_east: str,
+    bbox_south_west: str,
+) -> JsonResponse:
     """
     Get closest bakeries from a point.
     id_not_to_get: pk of bakeries not to get
@@ -57,8 +62,7 @@ def bakeries_arround(request, id_not_to_get: str,
     ymin = sw[0]
     xmax = ne[1]
     ymax = ne[0]
-    bbox = ((ymax, xmin), (ymax, xmax),
-            (ymin, xmax), (ymin, xmin), (ymax, xmin))
+    bbox = ((ymax, xmin), (ymax, xmax), (ymin, xmax), (ymin, xmin), (ymax, xmin))
 
     user_name = request.user.username
 
@@ -76,17 +80,18 @@ def bakeries_arround(request, id_not_to_get: str,
         CLOSEST_NB_ITEMS = 20
 
     # Get closest bakeries limit 20 and in bbox
-    bakeries_qset = Bakerie.objects.annotate(
-        distance=Distance(
-            'geom', center_point)
-    ).filter(geom__intersects=bbox
-             ).exclude(id__in=id_not_to_get
-                       ).order_by('distance'
-                                  )[0:CLOSEST_NB_ITEMS]
+    bakeries_qset = (
+        Bakerie.objects.annotate(distance=Distance("geom", center_point))
+        .filter(geom__intersects=bbox)
+        .exclude(id__in=id_not_to_get)
+        .order_by("distance")
+        .only(*BAKERIE_API_SEND_FIELDS)[0:CLOSEST_NB_ITEMS]
+    )
 
     # Get all votes related to users
-    user_votes_qset = Vote.objects.filter(
-        user__username=user_name).filter(bakerie__in=bakeries_qset)
+    user_votes_qset = Vote.objects.filter(user__username=user_name).filter(
+        bakerie__in=bakeries_qset
+    )
 
     gjson = serialize_bakeries(bakeries_qset, user_votes_qset)
     return JsonResponse(gjson)
