@@ -1,11 +1,12 @@
 from django.http import JsonResponse, HttpRequest
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
+from django.db.models import QuerySet
 from ..models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
 from django.conf import settings
-from typing import Tuple
+from typing import Tuple, List
 from ..definitions import BAKERIE_API_SEND_FIELDS
 
 
@@ -16,6 +17,31 @@ def _get_long_lat(longlat: str) -> Tuple[float]:
     longlat = longlat[1:-1].split(",")
     longitude, latitude = float(longlat[0]), float(longlat[1])
     return longitude, latitude
+
+
+def _generate_bakery_qset(
+    center_point: Point,
+    bbox: Polygon,
+    id_not_to_get: List[str],
+    fields_to_get: Tuple[str],
+    closest_nb_items: int,
+) -> QuerySet:
+    """
+    Generate a qset applying filters:
+        - Distance from a point
+        - Inside a bounding box
+        - Order by distance
+        - Get only usefull fields
+        - Get only a fixed number of items
+    """
+    bakeries_qset: QuerySet = (
+        Bakerie.objects.annotate(distance=Distance("geom", center_point))
+        .filter(geom__intersects=bbox)
+        .exclude(id__in=id_not_to_get)
+        .order_by("distance")
+        .only(*fields_to_get)[0:closest_nb_items]
+    )
+    return bakeries_qset
 
 
 def user_bakeries(request: HttpRequest) -> JsonResponse:
@@ -79,13 +105,8 @@ def bakeries_arround(
     else:
         CLOSEST_NB_ITEMS = 20
 
-    # Get closest bakeries limit 20 and in bbox
-    bakeries_qset = (
-        Bakerie.objects.annotate(distance=Distance("geom", center_point))
-        .filter(geom__intersects=bbox)
-        .exclude(id__in=id_not_to_get)
-        .order_by("distance")
-        .only(*BAKERIE_API_SEND_FIELDS)[0:CLOSEST_NB_ITEMS]
+    bakeries_qset = _generate_bakery_qset(
+        center_point, bbox, id_not_to_get, BAKERIE_API_SEND_FIELDS, CLOSEST_NB_ITEMS
     )
 
     # Get all votes related to users
