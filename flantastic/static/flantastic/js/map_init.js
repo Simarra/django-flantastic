@@ -9,7 +9,7 @@ function getFeaturesInView() {
     // Function wich retrieve data from screen bbox
     var features = [];
     let bounds = map.getBounds()
-    bakeries_lyr.eachLayer(function(lyr) {
+    bakeries_lyr.eachLayer(function (lyr) {
         if (bounds.contains(lyr.getLatLng())) {
             features.push(lyr)
         }
@@ -138,7 +138,7 @@ function resetLabels(markers) {
     //labelgun function
 
     var i = 0;
-    markers.eachLayer(function(label) {
+    markers.eachLayer(function (label) {
         addLabel(label, ++i);
     });
     labelEngine.update();
@@ -156,8 +156,8 @@ function addLabel(layer, id) {
         var rect = label.getBoundingClientRect();
 
         // We convert the container coordinates (screen space) to Lat/lng
-        var bottomLeft = mymap.containerPointToLatLng([rect.left, rect.bottom]);
-        var topRight = mymap.containerPointToLatLng([rect.right, rect.top]);
+        var bottomLeft = map.containerPointToLatLng([rect.left, rect.bottom]);
+        var topRight = map.containerPointToLatLng([rect.right, rect.top]);
         var boundingBox = {
             bottomLeft: [bottomLeft.lng, bottomLeft.lat],
             topRight: [topRight.lng, topRight.lat]
@@ -209,8 +209,8 @@ var baseMaps = {
 // that hides our labels, another that shows the labels. These are essentially
 // callbacks that labelgun uses to actually show and hide our labels
 // In this instance we set the labels opacity to 0 and 1 respectively. 
-var hideLabel = function(label) { label.labelObject.style.opacity = 0; };
-var showLabel = function(label) { label.labelObject.style.opacity = 1; };
+var hideLabel = function (label) { label.labelObject.style.opacity = 0; };
+var showLabel = function (label) { label.labelObject.style.opacity = 1; };
 labelEngine = new labelgun.default(hideLabel, showLabel);
 
 var bakeries_lyr = L.markerClusterGroup.layerSupport([]);
@@ -251,7 +251,7 @@ var feature_group = L.geoJson(gjson, {
 
 // For each marker lets add a label
 var i = 0; //TODO: Eliminate this uggly & useless i var
-feature_group.eachLayer(function(label) {
+feature_group.eachLayer(function (label) {
     label.added = true;
     addLabel(label, i);
     i++;
@@ -278,7 +278,7 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend zoomend', function(e) {
+map.on('moveend zoomend', function (e) {
     // Add points when moving on map. Limited to 2000
     if (feature_group.getLayers().lenght > 2000) {
         resetLabels(feature_group);
@@ -308,10 +308,9 @@ map.on('moveend zoomend', function(e) {
 });
 
 // labelgun when markercluster animations ends
-bakeries_lyr.on('animationend', function() {
+bakeries_lyr.on('animationend', function () {
     resetLabels(feature_group);
 })
 
-map.fitBounds(feature_group.getBounds()); //TODO: Conflict with locate?
 
 resetLabels(feature_group);
