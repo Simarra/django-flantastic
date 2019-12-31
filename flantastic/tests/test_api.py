@@ -3,6 +3,7 @@ from flantastic.models import Bakerie, Vote
 from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 from ..api.viewsets import _generate_bakery_qset
+from ..views import edit_bakerie
 from ..definitions import BAKERIE_API_SEND_FIELDS
 
 
@@ -30,7 +31,7 @@ class BakeriesAroundTestCase(TestCase):
 
     def test_around(self):
         """ Check basic function works. TODO: Test on working workstation."""
-        center_point = Point(1, 2, strid=4326)
+        center_point = Point(1, 2, srid=4326)
         bbox = Polygon.from_bbox((0, 0, 5, 5))
         id_not_to_get = 9999
         fields_to_get = BAKERIE_API_SEND_FIELDS
@@ -44,3 +45,12 @@ class BakeriesAroundTestCase(TestCase):
 
     def test_only_wanted_colums_returned(self):
         return True
+    
+
+class BakerieSave(TestCase):
+    """
+    High level class
+    Test that a bakery is well saved.
+    """
+    def SetUp(self):
+        pass

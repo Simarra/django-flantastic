@@ -20,10 +20,12 @@ def edit_bakerie(request: HttpRequest) -> JsonResponse:
         if request.user.is_authenticated:
             data: dict = json.loads(request.body)
 
-            # Update bakerie
             bakery = Bakerie.objects.filter(pk=data["pk"]).first()
-            bakery.enseigne = data["enseigne"]
-            bakery.save()
+            # Update bakerie only if authorized
+            # FIXME: Tmp fix waiting for group managing
+            if request.user.username == "admin":
+                bakery.enseigne = data["enseigne"]
+                bakery.save()
 
             # Update vote
             vote_q_set = Vote.objects.filter(
