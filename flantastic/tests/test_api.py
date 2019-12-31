@@ -41,3 +41,6 @@ class BakeriesAroundTestCase(TestCase):
         ).values_list()
 
         return True # TMP
+
+    def test_only_wanted_colums_returned(self):
+        return True
