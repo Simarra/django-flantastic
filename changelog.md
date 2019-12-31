@@ -2,7 +2,7 @@
 
 ---------
 
-##0.3.5
+##0.4.0
 - Labelgun plugin implemented.
 - Labels only on the left side.
 

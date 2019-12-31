@@ -278,7 +278,7 @@ map.locate({
     maxZoom: 16
 });
 
-map.on('moveend zoomend', function(e) {
+map.on('moveend', function(e) {
     // Add points when moving on map. Limited to 2000
     if (feature_group.getLayers().lenght > 2000) {
         resetLabels(feature_group);
