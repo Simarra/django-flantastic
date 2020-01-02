@@ -33,7 +33,7 @@ class BakeriesAroundTestCase(TestCase):
         """ Check basic function works. TODO: Test on working workstation."""
         center_point = Point(1, 2, srid=4326)
         bbox = Polygon.from_bbox((0, 0, 5, 5))
-        id_not_to_get = 9999
+        id_not_to_get = ["9999",]
         fields_to_get = BAKERIE_API_SEND_FIELDS
         closest_nb_items = 20
 

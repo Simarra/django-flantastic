@@ -22,7 +22,7 @@ def _get_long_lat(longlat: str) -> Tuple[float]:
 def _generate_bakery_qset(
     center_point: Point,
     bbox: Polygon,
-    id_not_to_get: list,
+    id_not_to_get: List[str],
     fields_to_get: Tuple[str],
     closest_nb_items: int,
 ) -> QuerySet:
@@ -39,7 +39,7 @@ def _generate_bakery_qset(
         .filter(geom__intersects=bbox)
         .exclude(id__in=id_not_to_get)
         .order_by("distance")
-        .only(*BAKERIE_API_SEND_FIELDS)[0:CLOSEST_NB_ITEMS]
+        .only(*fields_to_get)[0:closest_nb_items]
     )
     return bakeries_qset
 
