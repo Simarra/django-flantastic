@@ -62,7 +62,7 @@ class BakeriesAroundTestCase(TestCase):
         list_result = [e for e in res]
 
         for row in list_result:
-            self.assertin("enseigne", row.keys())
+            self.assertIn("enseigne", row.keys())
 
 class BakerieSave(TestCase):
     """
