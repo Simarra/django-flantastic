@@ -22,8 +22,8 @@ def edit_bakerie(request: HttpRequest) -> JsonResponse:
 
             bakery = Bakerie.objects.filter(pk=data["pk"]).first()
             # Update bakerie only if authorized
-            # FIXME: Tmp fix waiting for group managing
-            if request.user.username == "admin":
+            # IMPROVE: Make groups instead of juste staff
+            if request.user.is_staff:
                 bakery.enseigne = data["enseigne"]
                 bakery.save()
 
