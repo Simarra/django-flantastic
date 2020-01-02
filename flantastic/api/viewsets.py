@@ -6,7 +6,7 @@ from ..models import Bakerie, Vote
 from .serializers import serialize_bakeries
 import json
 from django.conf import settings
-from typing import Tuple
+from typing import Tuple, List
 from ..definitions import BAKERIE_API_SEND_FIELDS
 
 
