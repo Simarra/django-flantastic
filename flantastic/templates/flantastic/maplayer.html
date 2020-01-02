@@ -35,6 +35,7 @@
     var dataurl = '{% url "base_api_url" %}';
     var user_bakeries_url = '{% url "user_bakeries" %}';
     var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+    var zoom_level = {{ zoom_level }}
 
     var unnoted_bakery_icon_path= '{% static "flantastic/icons/unnoted_bakery.png" %}'
     var bad_bakery_icon_path= '{% static "flantastic/icons/bad_bakery.png" %}'

@@ -101,12 +101,13 @@ def bakeries_arround(
     bbox = Polygon(bbox)
 
     if hasattr(settings, "FLANTASTIC_CLOSEST_ITEMS_NB"):
-        CLOSEST_NB_ITEMS = settings.FLANTASTIC_CLOSEST_ITEMS_NB
+        closest_nb_items = settings.FLANTASTIC_CLOSEST_ITEMS_NB
     else:
-        CLOSEST_NB_ITEMS = 20
+        from ..definitions import DEFAULT_FLANTASTIC_CLOSEST_NB_ITEMS
+        closest_nb_items = DEFAULT_FLANTASTIC_CLOSEST_NB_ITEMS
 
     bakeries_qset = _generate_bakery_qset(
-        center_point, bbox, id_not_to_get, BAKERIE_API_SEND_FIELDS, CLOSEST_NB_ITEMS
+        center_point, bbox, id_not_to_get, BAKERIE_API_SEND_FIELDS, closest_nb_items
     )
 
     # Get all votes related to users
