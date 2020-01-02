@@ -1,6 +1,6 @@
 from django.test import TestCase
 from flantastic.models import Bakerie, Vote
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 from django.contrib.auth.models import User
 from ..api.viewsets import _generate_bakery_qset
 from ..views import edit_bakerie
