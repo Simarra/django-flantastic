@@ -284,7 +284,7 @@ map.on('moveend', function(e) {
         resetLabels(feature_group);
         return;
     }
-    if (map.getZoom() < 17) {
+    if (map.getZoom() < zoom_level) {
         resetLabels(feature_group);
         return;
     }
