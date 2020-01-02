@@ -267,6 +267,11 @@ L.control.layers(baseMaps, overlayMaps).addTo(map);
 if (is_authenticated == true) {
     set_user_bakeries()
 };
+
+/////////////////////
+// EVENTS SETTINGS //
+/////////////////////
+
 // Add position and closest points
 map.on('locationfound', onLocationFound);
 
@@ -314,3 +319,16 @@ bakeries_lyr.on('animationend', function() {
 
 
 resetLabels(feature_group);
+
+
+
+/////////////////////
+// CUSTOM CONTROLS //
+/////////////////////
+L.easyButton('<span class="target">&target;</span>', function() {
+    alert('you just clicked the html entity \&target;');
+}, 'Zoom on geoloc').addTo(mymap);
+
+L.easyButton('<span class="target">&circlearrowright;</span>', function() {
+    alert('you just clicked the html entity \&target;');
+}, 'Zoom on geoloc').addTo(mymap);

@@ -10,3 +10,10 @@
     font-family: var(--font-style);
     opacity: 0.5;
 }
+
+
+/* Controls */
+
+.target {
+    font-size: 1.5em;
+}
