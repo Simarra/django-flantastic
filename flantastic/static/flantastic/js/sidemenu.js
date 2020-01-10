@@ -91,8 +91,9 @@ async function formSubmit() {
     try {
         let res_json = await fetch(post_url, myInit)
         var res = await res_json.json()
-    } catch {
-        console.log("error")
+    } catch(error) {
+        console.log("error while posting data")
+        console.log(error)
     }
 
     refresh_updated_point(res);

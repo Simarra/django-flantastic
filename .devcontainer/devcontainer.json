@@ -26,6 +26,6 @@
     // Uncomment the next line if you want to add in default container specific settings.json values
     // "settings":  { "workbench.colorTheme": "Quiet Light" },
     // Uncomment the next line to run commands after the container is created.
-    "postCreateCommand": "poetry install && mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* "
+    "postCreateCommand": "poetry install"
         // Add the IDs of any extensions you want installed in the array below.
 }
